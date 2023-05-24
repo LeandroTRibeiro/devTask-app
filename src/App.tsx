@@ -18,7 +18,7 @@ const App = () => {
   },[])
 
   return(
-    <div className={`${theme} flex justify-center items-center bg-stone-100 dark:bg-stone-950`}>
+    <div className={`${theme} w-screen flex justify-center items-center ${theme === 'dark' ? 'bg-stone-950' : 'bg-stone-100'}`}>
       {theme === 'dark' &&
         <SunDim size={35} className='absolute right-5 top-5 text-stone-100 cursor-pointer' onClick={() => setTheme('light')} />
       }
