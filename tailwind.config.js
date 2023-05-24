@@ -1,14 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
-      darkMode: 'class',
+
       fontFamily: {
-        'montserrat': ['Montserrat'],
+        'montserrat': ['Montserrat', 'sans-serif'],
       },
       spacing: {
         '1140': '71.25rem',
