@@ -20,10 +20,10 @@ const App = () => {
   return(
     <div className={`${theme} w-screen flex justify-center items-center ${theme === 'dark' ? 'bg-stone-950' : 'bg-stone-100'}`}>
       {theme === 'dark' &&
-        <SunDim size={35} className='absolute right-5 top-5 text-stone-100 cursor-pointer' onClick={() => setTheme('light')} />
+        <SunDim size={35} className='absolute z-10 right-3 top-3 text-stone-100 cursor-pointer' onClick={() => setTheme('light')} />
       }
       {theme === 'light' &&
-        <MoonStars size={35} className='absolute right-5 top-5 text-stone-950 cursor-pointer' onClick={() => setTheme('dark')} />
+        <MoonStars size={35} className='absolute z-10 right-3 top-3 text-stone-950 cursor-pointer' onClick={() => setTheme('dark')} />
       }
       <RouterList />
     </div>

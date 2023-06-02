@@ -2,3 +2,27 @@
 @tailwind components;
 @tailwind utilities;
     
+@layer components {
+    .birthday-dark::-webkit-calendar-picker-indicator {
+        filter: invert(100%) sepia(100%) saturate(10000%) hue-rotate(180deg);
+        cursor: pointer;
+    }
+    .birthday::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+    }
+    .transitions {
+        transition: all .2s ease-in-out;
+    }
+    .fade-opacity {
+        animation: fade-opacity .35s ease-in-out;
+    }
+
+    @keyframes fade-opacity {
+        0%{
+            opacity: 0;
+        }
+        100%{
+            opacity: 1;
+        }
+    }
+}

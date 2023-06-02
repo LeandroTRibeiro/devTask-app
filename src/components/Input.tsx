@@ -4,8 +4,9 @@ interface PropsType {
     id: string,
     placeholder: string,
     value: string,
-    onChange: (e: string) => void,
+    onChange: (e: string, id?:string ) => void,
     disabled: boolean,
+    required: boolean,
     formErrMsg: string
 };
 
@@ -14,7 +15,7 @@ export const Input = (props: PropsType) => {
     return (
         <input 
             className={
-                `w-full px-2 py-2 outline-none border rounded-md bg-stone-100 dark:bg-stone-950 ${props.formErrMsg.includes('Email') && props.id.includes('email') ||
+                `w-full px-2 py-2 outline-none border rounded-md birthday dark:birthday-dark bg-transparent ${props.formErrMsg.includes('Email') && props.id.includes('email') ||
                 props.formErrMsg.includes('Senha') && props.id.includes('password') ||
                 props.formErrMsg.includes('Nome') && props.id.includes('firstName') ||
                 props.formErrMsg.includes('Sobrenome') && props.id.includes('lastName')
@@ -25,10 +26,10 @@ export const Input = (props: PropsType) => {
             id={props.id}
             placeholder={props.placeholder}
             value={props.value ? props.value : ''}
-            onChange={(e) => props.onChange(e.target.value)}
+            onChange={props.id.includes('edit') ? (e) => props.onChange(e.target.value, `${props.name}`) : (e) => props.onChange(e.target.value)}
             autoComplete='on'
             minLength={props.name.includes('assword') ? 6 : 1}
-            required
+            required={props.required ? true : false}
             disabled={props.disabled}
         />
     );
