@@ -95,7 +95,7 @@ export const Home = () => {
                         id='email'
                         placeholder='digite seu email'
                         value={email}
-                        onChange={setEmail}
+                        onChange={(e) => setEmail(e.target.value)}
                         disabled={disabled}
                         formErrMsg={formMsg}
                         required={true}
@@ -117,7 +117,7 @@ export const Home = () => {
                             id='password'
                             placeholder='digite seu senha'
                             value={password}
-                            onChange={setPassword}
+                            onChange={(e) => setPassword(e.target.value)}
                             disabled={disabled}
                             formErrMsg={formMsg}
                             required={true}

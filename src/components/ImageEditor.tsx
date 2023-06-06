@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import AvatarEditor from 'react-avatar-editor';
+import { FormErrMsg } from '../components/FormErrMsg';
+
 
 interface ImageEditorProps {
   HandlerNewAvatar: (image: Blob) => void;
@@ -10,6 +12,7 @@ const ImageEditor: React.FC<ImageEditorProps> = (Props: ImageEditorProps) => {
   const editorRef = useRef<AvatarEditor | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [scale, setScale] = useState(1);
+  const [formMsg, setFormMsg] = useState('');
 
   const [imageChange, setImageChange] = useState(false);
   
@@ -58,19 +61,21 @@ const ImageEditor: React.FC<ImageEditorProps> = (Props: ImageEditorProps) => {
       const file = dataURLtoBlob(editedImage);
       Props.HandlerNewAvatar(file);
 
-      // const base64Data = editedImage.split(',')[1];
-      // const decodedString = atob(base64Data);
-      // const fileSizeInBytes = decodedString.length;
-      // console.log(editedImage);
-      // Props.HandlerNewAvatar(`Tamanho do arquivo: ${fileSizeInBytes} bytes`);
-
     }
   }, [imageChange, scale]);
 
+  const IsImage = (file: File) => {
+    const acceptedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    return acceptedImageTypes.includes(file.type);
+  }
+
   const HandlerImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
+    if (event.target.files && event.target.files.length > 0 && IsImage(event.target.files[0])) {
+      setFormMsg('');
       const file = event.target.files[0];
       setSelectedImage(URL.createObjectURL(file));
+    } else {
+      setFormMsg('Imagem Inválida');
     }
   };
 
@@ -95,6 +100,10 @@ const ImageEditor: React.FC<ImageEditorProps> = (Props: ImageEditorProps) => {
       )}
       <div className={`fade-opacity flex flex-col gap-2 w-full ${selectedImage ? '' : 'h-full justify-center'}`}>
         <span className="text-center font-thin tablet-m:text-sm">Arraste e solte uma imagem abaixo ou clique para selecionar um arquivo!</span>
+        <FormErrMsg 
+            formErrMsg={formMsg}
+            name='Imagem'
+        />
         <label title="Arraste e solte uma imagem aqui ou clique para selecionar um arquivo!" className="w-full h-10 rounded-md border border-dashed border-stone-900 dark:border-stone-100 cursor-pointer bg-camera dark:bg-camera-white bg-no-repeat bg-center hover:bg-stone-300/10 transitions">
           <input
             className="opacity-0 hover:hidden w-full h-full border border-purple-700 cursor-pointer"

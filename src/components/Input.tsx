@@ -4,7 +4,7 @@ interface PropsType {
     id: string,
     placeholder: string,
     value: string,
-    onChange: (e: string, id?:string ) => void,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
     disabled: boolean,
     required: boolean,
     formErrMsg: string
@@ -26,7 +26,7 @@ export const Input = (props: PropsType) => {
             id={props.id}
             placeholder={props.placeholder}
             value={props.value ? props.value : ''}
-            onChange={props.id.includes('edit') ? (e) => props.onChange(e.target.value, `${props.name}`) : (e) => props.onChange(e.target.value)}
+            onChange={(e) => props.onChange(e)}
             autoComplete='on'
             minLength={props.name.includes('assword') ? 6 : 1}
             required={props.required ? true : false}

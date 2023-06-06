@@ -4,6 +4,7 @@ import { EditUserData } from "./EditUserData";
 import { useParams } from "react-router-dom";
 import { API } from "../api/API";
 import { Toast } from "../components/Toast";
+import { CalendarDashboard } from "../components/Calendar";
 
 interface DashboardInfoType {
     _id: string,
@@ -61,7 +62,7 @@ export const Dashboard = () => {
                 message={formMsg}
                 onClick={() => setFormMsg('')}
             />
-            <nav className="fixed h-16 w-screen max-w-[1440px] flex items-center pl-3 bg-purple-600 dark:bg-stone-800">
+            <nav className="h-16 w-screen max-w-[1440px] flex items-center pl-3 bg-purple-600 dark:bg-stone-800">
                 <button className="w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-400 bg-user bg-no-repeat bg-center flex justify-center items-center dark:hover:bg-stone-600 hover:bg-edit active:scale-95 active: transitions overflow-hidden" onClick={() => setEditPhoto(!editPhoto)}>
                     {dashboardInfo?.avatar &&
                         <img src={dashboardInfo.avatar} alt="avatar" className="hover:opacity-0 transitions"/>
@@ -78,6 +79,7 @@ export const Dashboard = () => {
             {editUserData &&
                 <EditUserData close={() => setEditUserData(false)}/>
             }
+            <CalendarDashboard />
         </main>
     );
 };

@@ -131,7 +131,7 @@ export const RecoverPassword = () => {
                                 id='password'
                                 placeholder='digite seu senha'
                                 value={password}
-                                onChange={setPassword}
+                                onChange={(e) => setPassword(e.target.value)}
                                 disabled={disabled}
                                 formErrMsg={formMsg}
                                 required={true}
@@ -158,7 +158,7 @@ export const RecoverPassword = () => {
                                 id='passwordConfirm'
                                 placeholder='confirme seu senha'
                                 value={passwordConfirm}
-                                onChange={setPasswordConfirm}
+                                onChange={(e) => setPasswordConfirm(e.target.value)}
                                 disabled={disabled}
                                 formErrMsg={formMsg}
                                 required={true}

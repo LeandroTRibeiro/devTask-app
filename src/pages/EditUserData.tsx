@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
 
+import { useParams } from 'react-router-dom';
+
+import ImageEditor from '../components/ImageEditor';
 import { Input } from "../components/Input";
+import { ShowPasswordIcons } from '../components/ShowPasswordIcons';
+import { Toast } from '../components/Toast';
+import { FormErrMsg } from '../components/FormErrMsg';
+
+import axios, { AxiosError } from 'axios';
+import { API } from '../api/API';
 
 import { CaretLeft, X } from "@phosphor-icons/react";
-import { ShowPasswordIcons } from '../components/ShowPasswordIcons';
-import ImageEditor from '../components/ImageEditor';
-import { useParams } from 'react-router-dom';
-import { API } from '../api/API';
-import { Toast } from '../components/Toast';
+
 
 interface PropsType {
     close: () => void
@@ -44,12 +49,12 @@ export const EditUserData = (Props: PropsType) => {
     const { id } = useParams();
 
     const [formMsg, setFormMsg] = useState('');
-    const [disabled, setDisabled] = useState(true);
+    const [disabled, setDisabled] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
     const [editAvatar, setEditAvatar] = useState(false);
 
-    const [curUserInfo, setCurUserInfo] = useState<UserCurType>();
+    const [userUpdateInfo, setUserUpdateInfo] = useState<UserCurType>();
     const [userInfo, setUserInfo] = useState<UserDataType>({
         avatar: '',
         firstName : '',
@@ -67,7 +72,6 @@ export const EditUserData = (Props: PropsType) => {
                 try {
                     const response = await API.getUserInfo(id);
                     setUserInfo(response);
-                    setCurUserInfo(response);
                     setDisabled(false);
 
                 } catch(error) {
@@ -86,37 +90,73 @@ export const EditUserData = (Props: PropsType) => {
         e.preventDefault();
 
         setDisabled(true);
-
-        // setCurUserInfo((prevState) => {
-
-        //     const curPrevState: UserCurType = {...prevState};
-
-        //     for(let key in userInfo) {
-        //         userInfo[key] === curPrevState[key] 
-        //             ? delete curPrevState[key] 
-        //             : curPrevState[key] = userInfo[key]
-        //     };
-
-        //     return curPrevState;
-
-        // });
-            
+        
         const formData = new FormData();
 
-        for(let key in curUserInfo) {
-            formData.append(key, curUserInfo[key]);
+        if(!userUpdateInfo) {
+            setDisabled(false);
+            setFormMsg('Edite alguma informação antes de salvar!');
+        }
+
+        for(let key in userUpdateInfo) {
+            formData.append(key, userUpdateInfo[key]);
         };
 
         if(id) {
             try {
-
                 const response = await API.updateUserInfo(id, formData);
-    
-                console.log(response);
+                setUserUpdateInfo(undefined)
+                setUserInfo(prevState => {
+                    const updatedState = { ...prevState };
+                    for (let key in userInfo) {
+                      if (response.update.hasOwnProperty(key) && response.update[key] !== userInfo[key]) {
+                        updatedState[key] = response.update[key];
+                      }
+                    }
+                    return updatedState;
+                });
+                setFormMsg('Novas Informações salvas!')
+                setDisabled(false);
                 
-            } catch(error) {
+            } catch(error: unknown | AxiosError) {
+
+
+                
+
+                if (axios.isAxiosError(error))  {
+
+                    if(error.message.includes('Network')) {
+                        setFormMsg('No momento nossos servidores estão ocupados tente novamente mais tarde!');
+                        setDisabled(false);
+                        return;
+                    };
+                    if(error.response?.data.error.includes('firstName')) {
+                        setFormMsg('Nome inválido!');
+                        setDisabled(false);
+                        return;
+                    };
+                    if(error.response?.data.error.includes('lastName')) {
+                        setFormMsg('Sobrenome inválido!');
+                        setDisabled(false);
+                        return;
+                    };
+                    if(error.response?.data.error.includes('email invalid.')) {
+                        setFormMsg('Email inválido ou já cadastrado!');
+                        setDisabled(false);
+                        return;
+                    };
+                    if(error.response?.data.error.includes('password')) {
+                        setFormMsg('Senha invalida!');
+                        setDisabled(false);
+                        return;
+                    };
+                    if(error.response?.data.error.includes('password')) {
+                        setFormMsg('Senha invalida!');
+                        setDisabled(false);
+                        return;
+                    };
     
-                console.log(error);
+                };
                 
             }
         }
@@ -124,8 +164,20 @@ export const EditUserData = (Props: PropsType) => {
         
     };
 
-    const UpdateUserData = ( newValue: string, propertyName?: string) => {
-        if(propertyName) setUserInfo(prevUserData => ({...prevUserData,[propertyName]: `${newValue}`}));
+    const UpdateUserData = ( e: React.ChangeEvent<HTMLInputElement>) => {
+
+        const { name, value } = e.target;
+
+        setUserInfo( prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+
+        setUserUpdateInfo( prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+
     };
 
     return (
@@ -146,7 +198,7 @@ export const EditUserData = (Props: PropsType) => {
                         <div className="flex flex-col items-center gap-5">
                             <div className={`w-20 h-20 rounded-full bg-stone-400 bg-user bg-no-repeat bg-center flex justify-center items-center transitions after:transition-all after:duration-200 after:ease-in-out after:content-[''] after:absolute after:ml-14 after:mt-14 after:w-8 after:h-8 after:rounded-full after:flex after:justify-center after:items-center after:bg-camera after:bg-no-repeat after:bg-80% after:bg-center after:backdrop-blur-sm after:bg-white/10 cursor-pointer hover:after:bg-white/50 hover:after:scale-110 active:after:scale-95 overflow-hidden`} onClick={() => setEditAvatar(!editAvatar)}>
                                 {userInfo?.avatar &&
-                                    <img src={userInfo.avatar} alt="" />
+                                    <img src={userInfo.avatar} alt="avatar" />
                                 }
                             </div>
                             <label className={`flex w-full items-center cursor-pointer gap-2 ${userInfo.firstName.length + userInfo.lastName.length >= 19 ? 'flex-col' : 'flex-row justify-around'}`}>
@@ -158,11 +210,15 @@ export const EditUserData = (Props: PropsType) => {
                                         name='firstName'
                                         type="text"
                                         value={userInfo.firstName}
-                                        onChange={(e) => UpdateUserData(e.target.value, 'firstName')}
+                                        onChange={(e) => UpdateUserData(e)}
                                         disabled={disabled}
                                         required={false}
                                         size={userInfo.firstName?.length || 5}
                                         maxLength={25}
+                                    />
+                                    <FormErrMsg 
+                                        formErrMsg={formMsg}
+                                        name='Nome'
                                     />
                                 </label>
                                 <label className='flex flex-col w-full'>
@@ -173,11 +229,15 @@ export const EditUserData = (Props: PropsType) => {
                                         name='lastName'
                                         type="text"
                                         value={userInfo.lastName}
-                                        onChange={(e) => UpdateUserData(e.target.value, 'lastName')}
+                                        onChange={(e) => UpdateUserData(e)}
                                         disabled={disabled}
                                         required={false}
                                         size={userInfo.lastName?.length || 5}
                                         maxLength={25}
+                                    />
+                                    <FormErrMsg 
+                                        formErrMsg={formMsg}
+                                        name='Sobrenome'
                                     />
                                 </label>
                             </label>
@@ -194,6 +254,10 @@ export const EditUserData = (Props: PropsType) => {
                                 placeholder=""
                                 disabled={disabled}
                                 required={false}
+                            />
+                            <FormErrMsg 
+                                formErrMsg={formMsg}
+                                name='Email'
                             />
                         </label>
                         <label className="flex flex-col">
@@ -216,6 +280,10 @@ export const EditUserData = (Props: PropsType) => {
                                     showPassword={showPassword}
                                 />
                             </div>
+                            <FormErrMsg 
+                                formErrMsg={formMsg}
+                                name='Senha'
+                            />
                         </label>
                         <label className="flex flex-col">
                             <span className="font-semibold tablet-m:text-sm">Aniversário</span>
@@ -236,7 +304,7 @@ export const EditUserData = (Props: PropsType) => {
                     <div className={`transitions h-[428px] mobile-gg:h-full overflow-hidden ${editAvatar ? 'ml-5 mobile-gg:ml-0 w-96 tablet-m:w-64' : 'w-0'}`}>
                         {editAvatar &&
                             <ImageEditor 
-                                HandlerNewAvatar={(img) => setCurUserInfo(prev => ({...prev, avatar: img}))}
+                                HandlerNewAvatar={(img) => setUserUpdateInfo(prev => ({...prev, avatar: img}))}
                             />
                         }
                     </div>

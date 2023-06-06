@@ -114,7 +114,7 @@ export const Signin = () => {
                         id='firstName'
                         placeholder='digite seu nome'
                         value={firstName}
-                        onChange={setFirstName}
+                        onChange={(e) => setFirstName(e.target.value)}
                         formErrMsg={formMsg}
                         disabled={disabled}
                         required={true}
@@ -132,7 +132,7 @@ export const Signin = () => {
                         id='lastName'
                         placeholder='digite seu sobrenome'
                         value={lastName}
-                        onChange={setLastName}
+                        onChange={(e) => setLastName(e.target.value)}
                         formErrMsg={formMsg}
                         disabled={disabled}
                         required={true}
@@ -150,7 +150,7 @@ export const Signin = () => {
                         id='email'
                         placeholder='digite seu email'
                         value={email}
-                        onChange={setEmail}
+                        onChange={(e) => setEmail(e.target.value)}
                         formErrMsg={formMsg}
                         disabled={disabled}
                         required={true}
@@ -168,7 +168,7 @@ export const Signin = () => {
                         id='emailConfirm'
                         placeholder='confirme seu email'
                         value={emailConfirm}
-                        onChange={setEmaiConfirm}
+                        onChange={(e) => setEmaiConfirm(e.target.value)}
                         formErrMsg={formMsg}
                         disabled={disabled}
                         required={true}
@@ -183,7 +183,7 @@ export const Signin = () => {
                             id='password'
                             placeholder='digite sua senha'
                             value={password}
-                            onChange={setPassword}
+                            onChange={(e) => setPassword(e.target.value)}
                             formErrMsg={formMsg}
                             disabled={disabled}
                             required={true}
@@ -208,7 +208,7 @@ export const Signin = () => {
                             id='passwordConfirm'
                             placeholder='confirme sua senha'
                             value={passwordConfirm}
-                            onChange={setPasswordConfirm}
+                            onChange={(e) => setPasswordConfirm(e.target.value)}
                             formErrMsg={formMsg}
                             disabled={disabled}
                             required={true}
