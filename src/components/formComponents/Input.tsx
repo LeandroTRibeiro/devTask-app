@@ -1,4 +1,4 @@
-interface PropsType {
+interface InputPropsType {
     type: string,
     name: string,
     id: string,
@@ -10,7 +10,7 @@ interface PropsType {
     formErrMsg: string
 };
 
-export const Input = (props: PropsType) => {
+export const Input = (props: InputPropsType) => {
 
     return (
         <input 

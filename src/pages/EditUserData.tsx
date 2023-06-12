@@ -2,19 +2,19 @@ import { useState, useEffect } from 'react';
 
 import { useParams } from 'react-router-dom';
 
-import ImageEditor from '../components/ImageEditor';
-import { Input } from "../components/Input";
-import { ShowPasswordIcons } from '../components/ShowPasswordIcons';
+import ImageEditor from '../components/imageComponents/ImageEditor';
+import { Input } from "../components/formComponents/Input";
+import { ShowPasswordIcons } from '../components/formComponents/ShowPasswordIcons';
 import { Toast } from '../components/Toast';
-import { FormErrMsg } from '../components/FormErrMsg';
+import { FormErrMsg } from '../components/formComponents/FormErrMsg';
 
 import axios, { AxiosError } from 'axios';
-import { API } from '../api/API';
+import { devTaskAPI } from '../APIs/devTaskAPI';
 
 import { CaretLeft, X } from "@phosphor-icons/react";
 
 
-interface PropsType {
+interface EditUserDataPropsType {
     close: () => void
 };
 
@@ -44,7 +44,7 @@ interface UserCurType extends ObjectCurType {
     [key: string]: any;
 };
 
-export const EditUserData = (Props: PropsType) => {
+export const EditUserData = (Props: EditUserDataPropsType) => {
 
     const { id } = useParams();
 
@@ -70,7 +70,7 @@ export const EditUserData = (Props: PropsType) => {
             if(id) {
                 setDisabled(true);
                 try {
-                    const response = await API.getUserInfo(id);
+                    const response = await devTaskAPI.getUserInfo(id);
                     setUserInfo(response);
                     setDisabled(false);
 
@@ -104,7 +104,7 @@ export const EditUserData = (Props: PropsType) => {
 
         if(id) {
             try {
-                const response = await API.updateUserInfo(id, formData);
+                const response = await devTaskAPI.updateUserInfo(id, formData);
                 setUserUpdateInfo(undefined)
                 setUserInfo(prevState => {
                     const updatedState = { ...prevState };
@@ -181,7 +181,7 @@ export const EditUserData = (Props: PropsType) => {
     };
 
     return (
-        <section className={`absolute w-screen max-w-[1440px] h-screen flex justify-center items-center backdrop-blur-sm bg-stone-400/20 text-stone-950 dark:text-stone-100 overflow-hidden ${disabled ? 'grayscale animate-pulse pointer-events-none' : ''}`}>
+        <section className={`absolute w-screen max-w-[1440px] h-screen flex justify-center items-center backdrop-blur-sm bg-stone-400/20 text-stone-950 dark:text-stone-100 overflow-hidden z-20 ${disabled ? 'grayscale animate-pulse pointer-events-none' : ''}`}>
             <Toast 
                 message={formMsg}
                 onClick={() => setFormMsg('')}
@@ -189,14 +189,14 @@ export const EditUserData = (Props: PropsType) => {
             <form action="POST" onSubmit={HandlerSubmit} className={`mobile-g:w-full mobile-g:h-full mobile-g:rounded-none flex flex-col gap-5 tablet-m:gap-3 shadow-xl p-5 rounded-md bg-stone-100 dark:bg-stone-950 transitions`}>
                 <div className="w-full flex justify-end mobile-g:justify-start">
                     {editAvatar &&
-                        <CaretLeft size={25} weight="bold" className="hidden mobile-gg:flex hover:text-red-500 active:scale-95 transitions" onClick={() => setEditAvatar(false)} /> 
+                        <CaretLeft size={25} weight="bold" className="hidden mobile-gg:flex hover:text-red-500 active:scale-90 transitions" onClick={() => setEditAvatar(false)} /> 
                     }
-                    <X size={25} weight="bold" className="hover:text-red-500 active:scale-95 transitions" onClick={Props.close} />
+                    <X size={25} weight="bold" className="hover:text-red-500 active:scale-90 transitions" onClick={Props.close} />
                 </div>
                 <div className='flex mobile-g:justify-center mobile-g:items-center mobile-g:h-full'>
                     <div className={`flex w-96 min-w-96 flex-col gap-2 tablet-m:gap-3 ${editAvatar ? 'mobile-gg:hidden' : ''}`}>
                         <div className="flex flex-col items-center gap-5">
-                            <div className={`w-20 h-20 rounded-full bg-stone-400 bg-user bg-no-repeat bg-center flex justify-center items-center transitions after:transition-all after:duration-200 after:ease-in-out after:content-[''] after:absolute after:ml-14 after:mt-14 after:w-8 after:h-8 after:rounded-full after:flex after:justify-center after:items-center after:bg-camera after:bg-no-repeat after:bg-80% after:bg-center after:backdrop-blur-sm after:bg-white/10 cursor-pointer hover:after:bg-white/50 hover:after:scale-110 active:after:scale-95 overflow-hidden`} onClick={() => setEditAvatar(!editAvatar)}>
+                            <div className={`w-20 h-20 rounded-full bg-stone-400 bg-user bg-no-repeat bg-center flex justify-center items-center transitions after:transition-all after:duration-200 after:ease-in-out after:content-[''] after:absolute after:ml-14 after:mt-14 after:w-8 after:h-8 after:rounded-full after:flex after:justify-center after:items-center after:bg-camera after:bg-no-repeat after:bg-80% after:bg-center after:backdrop-blur-sm after:bg-white/10 cursor-pointer hover:after:bg-white/50 hover:after:scale-110 active:after:scale-90 overflow-hidden`} onClick={() => setEditAvatar(!editAvatar)}>
                                 {userInfo?.avatar &&
                                     <img src={userInfo.avatar} alt="avatar" />
                                 }
@@ -299,7 +299,7 @@ export const EditUserData = (Props: PropsType) => {
                                 required={false}
                             />
                         </label>
-                        <button className='w-full font-medium tracking-wider border border-purple-800 rounded-md bg-purple-800 text-stone-100 py-2 hover:bg-stone-100 dark:hover:bg-stone-950 hover:text-purple-800 active:scale-95 transitions disabled:grayscale disabled:animate-pulse' disabled={disabled}>SALVAR</button>
+                        <button className='w-full font-medium tracking-wider border border-purple-800 rounded-md bg-purple-800 text-stone-100 py-2 hover:bg-stone-100 dark:hover:bg-stone-950 hover:text-purple-800 active:scale-90 transitions disabled:grayscale disabled:animate-pulse' disabled={disabled}>SALVAR</button>
                     </div>
                     <div className={`transitions h-[428px] mobile-gg:h-full overflow-hidden ${editAvatar ? 'ml-5 mobile-gg:ml-0 w-96 tablet-m:w-64' : 'w-0'}`}>
                         {editAvatar &&

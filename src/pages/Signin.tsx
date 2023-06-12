@@ -6,13 +6,13 @@ import { useNavigate } from 'react-router-dom';
 
 import axios from "axios";
 import { AxiosError } from 'axios';
-import { API } from '../api/API';
+import { devTaskAPI } from '../APIs/devTaskAPI';
 import { setCookies } from '../helpers/Cookie';
 
 import { Toast } from '../components/Toast';
-import { ShowPasswordIcons } from '../components/ShowPasswordIcons';
-import { Input } from '../components/Input';
-import { FormErrMsg } from '../components/FormErrMsg';
+import { ShowPasswordIcons } from '../components/formComponents/ShowPasswordIcons';
+import { Input } from '../components/formComponents/Input';
+import { FormErrMsg } from '../components/formComponents/FormErrMsg';
 
 import { PencilLine } from "@phosphor-icons/react";
 
@@ -50,7 +50,7 @@ export const Signin = () => {
 
         try {
 
-            const response = await API.signin(firstName, lastName, email, password);
+            const response = await devTaskAPI.signin(firstName, lastName, email, password);
             setCookies(response.token);
             dispatch(setLogged(true));
             navigate(`/${response.id}/dashboard`);
@@ -220,7 +220,7 @@ export const Signin = () => {
                         />
                     </div>
                 </label>
-                <button className="col-span-2 tablet-p:col-span-1 font-medium tracking-wider border border-purple-800 rounded-md bg-purple-800 text-stone-100 py-2 hover:bg-stone-100 dark:hover:bg-stone-950 hover:text-purple-800 active:scale-95 transitions" disabled={disabled}>ENTRAR</button>
+                <button className="col-span-2 tablet-p:col-span-1 font-medium tracking-wider border border-purple-800 rounded-md bg-purple-800 text-stone-100 py-2 hover:bg-stone-100 dark:hover:bg-stone-950 hover:text-purple-800 active:scale-90 transitions" disabled={disabled}>ENTRAR</button>
             </form>
         </section>
     );

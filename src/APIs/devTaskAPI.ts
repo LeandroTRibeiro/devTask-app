@@ -2,7 +2,7 @@ import axios from "axios";
 
 const BASEAPI = "http://localhost:2000";
 
-export const API = {
+export const devTaskAPI = {
     signin: async (firstName: string, lastName: string, email: string, password: string) => {
         const response = await axios.post(`${BASEAPI}/devtask/signin`, {
             firstName,

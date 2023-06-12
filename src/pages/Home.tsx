@@ -6,12 +6,12 @@ import { setLogged } from '../redux/reducers/LoggedReducer';
 import { Link, useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
-import { API } from '../api/API';
+import { devTaskAPI } from '../APIs/devTaskAPI';
 import { getCookies, setCookies } from '../helpers/Cookie';
 
-import { Input } from '../components/Input';
+import { Input } from '../components/formComponents/Input';
 import { Toast } from '../components/Toast';
-import { FormErrMsg } from '../components/FormErrMsg';
+import { FormErrMsg } from '../components/formComponents/FormErrMsg';
 
 import { Eye, EyeClosed, PencilLine } from "@phosphor-icons/react";
 
@@ -35,7 +35,7 @@ export const Home = () => {
         const autoLogin = async (token: string) => {
             
             try {
-                const response = await API.autoLogin(token);
+                const response = await devTaskAPI.autoLogin(token);
                 setCookies(response.token);
                 dispatch(setLogged(true));
                 navigate(`/${response.id}/dashboard`);
@@ -57,7 +57,7 @@ export const Home = () => {
         setDisabled(true);
 
         try {
-            const response = await API.login(email, password);
+            const response = await devTaskAPI.login(email, password);
             setCookies(response.token);
             dispatch(setLogged(true));
             navigate(`/${response.id}/dashboard`);
@@ -134,7 +134,7 @@ export const Home = () => {
                         name='Password'
                     />
                 </label>
-                <button className="w-full font-medium tracking-wider border border-purple-800 rounded-md bg-purple-800 text-stone-100 py-2 hover:bg-stone-100 dark:hover:bg-stone-950 hover:text-purple-800 active:scale-95 transitions disabled:grayscale disabled:animate-pulse" disabled={disabled}>ENTRAR</button>
+                <button className="w-full font-medium tracking-wider border border-purple-800 rounded-md bg-purple-800 text-stone-100 py-2 hover:bg-stone-100 dark:hover:bg-stone-950 hover:text-purple-800 active:scale-90 transitions disabled:grayscale disabled:animate-pulse" disabled={disabled}>ENTRAR</button>
                 <p className='text-center'>Não possui cadastro?<Link to="/signin" className="text-purple-800"> Casdastre-se é grátis.</Link></p>
             </form>
             <div className="flex-1 flex flex-col py-5 items-center justify-center px-10 mobile-g:px-5 font-montserrat bg-purple-400 dark:bg-stone-800">
