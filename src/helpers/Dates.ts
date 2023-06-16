@@ -82,3 +82,71 @@ export const selectedDayString = (date: Date) => {
 
     return `${day} de ${monthString} de ${yearString}`;
 };
+
+export const setMinuteStart = (startMinute: number) => {
+
+    switch (startMinute) {
+        case 0o0:
+            return 'col-start-1';
+        case 0o5:
+            return 'col-start-2';
+        case 10:
+            return 'col-start-3';
+        case 15:
+            return 'col-start-4';
+        case 20:
+            return 'col-start-5';
+        case 25:
+            return 'col-start-6';
+        case 30:
+            return 'col-start-7';
+        case 35:
+            return 'col-start-8';
+        case 40:
+            return 'col-start-9';
+        case 45:
+            return 'col-start-10';
+        case 50:
+            return 'col-start-11';
+        case 55:
+            return 'col-start-12';
+        default:
+            return '';              
+    };
+};
+
+export const setMinuteEnd = (startHour: number, endHour: number, endMinute: number, final: boolean) => {
+
+    if(startHour < endHour && !final) {
+        return 'col-end-13';
+    };
+
+    switch (endMinute) {
+        case 0o0:
+            return 'col-end-13';
+        case 0o5:
+            return 'col-end-2';
+        case 10:
+            return 'col-end-3';
+        case 15:
+            return 'col-end-4';
+        case 20:
+            return 'col-end-5';
+        case 25:
+            return 'col-end-6';
+        case 30:
+            return 'col-end-7';
+        case 35:
+            return 'col-end-8';
+        case 40:
+            return 'col-end-9';
+        case 45:
+            return 'col-end-10';
+        case 50:
+            return 'col-end-11';
+        case 55:
+            return 'col-end-12';
+        default:
+            return '';              
+    };
+};

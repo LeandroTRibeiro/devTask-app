@@ -31,13 +31,20 @@
     
 @layer components {
 
-    .birthday-dark::-webkit-calendar-picker-indicator {
-        padding-left: 100%;
-        border: 1px dashed red;
+    .hour-dark::-webkit-calendar-picker-indicator {
         filter: invert(100%) sepia(100%) saturate(10000%) hue-rotate(180deg);
         cursor: pointer;
     }
-    .birthday::-webkit-calendar-picker-indicator {
+
+    .hour::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+    }
+
+    .date-dark::-webkit-calendar-picker-indicator {
+        filter: invert(100%) sepia(100%) saturate(10000%) hue-rotate(180deg);
+        cursor: pointer;
+    }
+    .date::-webkit-calendar-picker-indicator {
         cursor: pointer;
     }
 

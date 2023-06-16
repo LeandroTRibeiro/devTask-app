@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Broom, Calendar, CalendarPlus, CaretLeft, CaretRight, CloudSun, Gear, GearSix, UserCircleGear, WechatLogo, X } from "@phosphor-icons/react";
 
-import { EditUserData } from "../../pages/EditUserData";
+import { EditUserData } from "./EditUserData";
 // import * as Dates from '../../helpers/Dates';
 import { useDispatch } from 'react-redux';
 import { setTheme } from '../../redux/reducers/ThemeReducer';

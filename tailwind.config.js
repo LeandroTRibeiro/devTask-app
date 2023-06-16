@@ -35,6 +35,10 @@ export default {
       },
       backgroundSize: {
         '80%': '80%',
+      },
+      gridTemplateColumns: {
+        '12': 'repeat(12, minmax(50px, 1fr))',
+        'footer': '200px minmax(900px, 1fr) 100px'
       }
     },
   },

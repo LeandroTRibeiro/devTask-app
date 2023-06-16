@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 
 import { useParams } from 'react-router-dom';
 
-import ImageEditor from '../components/imageComponents/ImageEditor';
-import { Input } from "../components/formComponents/Input";
-import { ShowPasswordIcons } from '../components/formComponents/ShowPasswordIcons';
-import { Toast } from '../components/Toast';
-import { FormErrMsg } from '../components/formComponents/FormErrMsg';
+import ImageEditor from './imageComponents/ImageEditor';
+import { Input } from "../formComponents/Input";
+import { ShowPasswordIcons } from '../formComponents/ShowPasswordIcons';
+import { Toast } from '../Toast';
+import { FormErrMsg } from '../formComponents/FormErrMsg';
 
 import axios, { AxiosError } from 'axios';
-import { devTaskAPI } from '../APIs/devTaskAPI';
+import { devTaskAPI } from '../../APIs/devTaskAPI';
 
 import { CaretLeft, X } from "@phosphor-icons/react";
 
@@ -189,9 +189,9 @@ export const EditUserData = (Props: EditUserDataPropsType) => {
             <form action="POST" onSubmit={HandlerSubmit} className={`mobile-g:w-full mobile-g:h-full mobile-g:rounded-none flex flex-col gap-5 tablet-m:gap-3 shadow-xl p-5 rounded-md bg-stone-100 dark:bg-stone-950 transitions`}>
                 <div className="w-full flex justify-end mobile-g:justify-start">
                     {editAvatar &&
-                        <CaretLeft size={25} weight="bold" className="hidden mobile-gg:flex hover:text-red-500 active:scale-90 transitions" onClick={() => setEditAvatar(false)} /> 
+                        <CaretLeft size={25} weight="bold" className="hidden mobile-gg:flex hover:text-red-500 active:scale-90 transitions cursor-pointer" onClick={() => setEditAvatar(false)} /> 
                     }
-                    <X size={25} weight="bold" className="hover:text-red-500 active:scale-90 transitions" onClick={Props.close} />
+                    <X size={25} weight="bold" className="hover:text-red-500 active:scale-90 transitions cursor-pointer" onClick={Props.close} />
                 </div>
                 <div className='flex mobile-g:justify-center mobile-g:items-center mobile-g:h-full'>
                     <div className={`flex w-96 min-w-96 flex-col gap-2 tablet-m:gap-3 ${editAvatar ? 'mobile-gg:hidden' : ''}`}>

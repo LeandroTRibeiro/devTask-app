@@ -25,11 +25,11 @@ const App = () => {
 
   return(
     <div className={`${theme} w-screen flex justify-center items-center ${theme === 'dark' ? 'bg-stone-950' : 'bg-stone-100'}`}>
-      {theme === 'dark' && !logged &&
-        <SunDim size={35} className='absolute z-10 right-3 top-3 text-stone-100 cursor-pointer' onClick={() => dispatch(setTheme('light'))} />
+      {theme === 'dark' && logged &&
+        <SunDim size={35} className='absolute z-20 right-3 top-3 text-stone-100 cursor-pointer' onClick={() => dispatch(setTheme('light'))} />
       }
-      {theme === 'light' && !logged &&
-        <MoonStars size={35} className='absolute z-10 right-3 top-3 text-stone-950 cursor-pointer' onClick={() => dispatch(setTheme('dark'))} />
+      {theme === 'light' && logged &&
+        <MoonStars size={35} className='absolute z-20 right-3 top-3 text-stone-950 cursor-pointer' onClick={() => dispatch(setTheme('dark'))} />
       }
       <RouterList />
     </div>

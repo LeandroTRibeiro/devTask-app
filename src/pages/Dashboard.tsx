@@ -6,7 +6,7 @@ import { MenuTop } from "../components/menuComponents/MenuTop";
 import { WeatherWindow } from "../components/weatherComponents/WeatherWindow";
 import { Calendar } from "../components/CalendarComponents/Calendar";
 import { DayTasks } from "../components/DayTasksComponents/DayTasks";
-import { selectedDayString } from "../helpers/Dates";
+import { NewTask } from "./NewTask";
 
 interface DashboardInfoType {
     _id: string,
@@ -32,6 +32,8 @@ export const Dashboard = () => {
     const [dashboardInfo, setDashboardInfo] = useState<DashboardInfoType>();
 
     const [selectedDay, setSelectedDay] = useState(new Date());
+
+    const [newTask, setNewTask] = useState(false);
 
     useEffect(() => {
         
@@ -82,11 +84,17 @@ export const Dashboard = () => {
                     {/* <WeatherWindow /> */}
                 </div>
                 <DayTasks 
-                    selectedDay={selectedDayString(selectedDay)} 
+                    selectedDay={selectedDay} 
                     plusDay={HandlerSelectedDayPlus}
                     minusDay={HandlerSelectedDayMinus}
+                    newTask={() => setNewTask(!newTask)}
                 />
             </div>
+            {newTask &&
+                <NewTask 
+                    close={() => setNewTask(!newTask)}
+                />
+            }
         </main>
     );
 };

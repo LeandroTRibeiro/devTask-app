@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import AvatarEditor from 'react-avatar-editor';
-import { FormErrMsg } from '../formComponents/FormErrMsg';
+import { FormErrMsg } from '../../formComponents/FormErrMsg';
 
 
 interface ImageEditorProps {
