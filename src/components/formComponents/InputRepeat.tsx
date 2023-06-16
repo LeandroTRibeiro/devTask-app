@@ -11,7 +11,7 @@ type SelectPropsType = {
     change: (event: {value: number[] | never[], name: string}) => void,
 }
 
-export const Select = (Props: SelectPropsType) => {
+export const InputReapeat = (Props: SelectPropsType) => {
 
     const detailsRef = useRef<HTMLDetailsElement>(null);
 
@@ -32,7 +32,7 @@ export const Select = (Props: SelectPropsType) => {
     }, []);
 
     return (
-        <details className=" max-w-[288px] relative cursor-pointer" ref={detailsRef}>
+        <details className="max-w-[288px] relative cursor-pointer" ref={detailsRef}>
             <summary className="flex items-center justify-between list-none border border-purple-800 rounded-md p-2">
                 {Props.frequences.map((item) => {
                     if(item.value.length === Props.selected.length) {

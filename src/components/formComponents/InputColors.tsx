@@ -6,8 +6,6 @@ export const InputColors = () => {
 
     return (
         <div className="flex flex-col gap-2">
-            <span>Cor</span>
-
             <div className='flex justify-between'>
                 <button
                     type="button" 

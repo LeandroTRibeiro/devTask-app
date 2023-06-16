@@ -1,8 +1,9 @@
 import { X } from '@phosphor-icons/react';
 import { useState } from 'react';
 import { Input } from '../components/formComponents/Input';
-import { Select } from '../components/formComponents/Select';
+import { InputReapeat } from '../components/formComponents/InputRepeat';
 import { InputColors } from '../components/formComponents/InputColors';
+import { InputTime } from '../components/formComponents/InputTime';
 
 interface NewTaskPropsType {
     close: () => void,
@@ -88,25 +89,23 @@ export const NewTask = (Props: NewTaskPropsType) => {
                 </label>
                 <label className='flex flex-col'>
                     <span>Repetir</span>
-                    <Select 
+                    <InputReapeat 
                         frequences={frequences}
                         selected={newTask.repeat}
                         change={(event) => HandlerChange(event)}
                     />
-                    {/* <select 
-                        className='outline-none bg-transparent font-montserrat border border-purple-800 px-2 py-2
-                        rounded-md'
-                        name="repeat" 
-                        id="repeat"
-                    >
-                        <option value="" selected className='dark:bg-stone-950 '>Uma vez</option>
-                        <option value="" className='dark:bg-stone-950 '>Diariamente</option>
-                        <option value="" className='dark:bg-stone-950 '>Segunda a Sexta</option>
-                        <option value="" className='dark:bg-stone-950 '>Finais de Semana</option>
-                        <option value="" className='dark:bg-stone-950 '>Personalizado...</option>
-                    </select> */}
                 </label>
-                <div className='w-full flex justify-around'>
+                <div className='flex w-full gap-5'>
+                    <label className='w-1/2'>
+                        <span>Começa</span>
+                        <InputTime />
+                    </label>
+                    <label className='w-1/2'>
+                        <span>Termina</span>
+                        <InputTime />
+                    </label>
+                </div>
+                {/* <div className='w-full flex justify-around'>
                     <label className='flex flex-col items-center gap-2'>
                         <span>Começa</span>
                         <input 
@@ -125,8 +124,11 @@ export const NewTask = (Props: NewTaskPropsType) => {
                             id="end" 
                         />
                     </label>
-                </div>
-                <InputColors />
+                </div> */}
+                <label className='flex flex-col gap-2'>
+                    <span>Cor</span>
+                    <InputColors />
+                </label>
             </form>
         </section>
     );
