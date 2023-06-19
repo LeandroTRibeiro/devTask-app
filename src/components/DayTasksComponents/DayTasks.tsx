@@ -86,10 +86,7 @@ export const DayTasks = (Props: DayTasksPropsType) => {
                                 const startMinute = +tasks.start.split(':')[1];
                                 const endHour = +tasks.end.split(':')[0];
                                 const endMinute = +tasks.end.split(':')[1];
-                                const hour = +hours.split(':')[0];
-
-                                console.log(startHour, startMinute, endHour, endMinute, hour);
-                                
+                                const hour = +hours.split(':')[0];                                
 
                                 if(
                                     (tasks.day.includes(selectDay.day)  && 

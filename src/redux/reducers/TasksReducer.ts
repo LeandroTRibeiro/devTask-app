@@ -20,8 +20,8 @@ export const slice = createSlice({
                 month: [0o6],
                 year: [2023,2024],
                 repeat: [],
-                start: '00:05',
-                end: '00:20',
+                start: '00:00',
+                end: '00:00',
                 title: 'testindo',
                 description: ['montagem', 'inicialização', 'atualização', 'desmontagem'],
                 color: 'red'

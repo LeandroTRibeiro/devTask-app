@@ -1,9 +1,20 @@
 import { useEffect, useRef, useState, WheelEvent } from "react";
 import { nanoid } from "@reduxjs/toolkit";
 import { Clock } from "@phosphor-icons/react";
+import { FormErrMsg } from "./FormErrMsg";
 
 interface InputTimePropsType {
     hour: string
+}
+
+interface TimeType {
+  hour: string[];
+  minute: string[];
+}
+
+interface TimeState {
+  start: TimeType;
+  end: TimeType;
 }
 
 export const InputTime = (Props: InputTimePropsType) => {
@@ -12,10 +23,22 @@ export const InputTime = (Props: InputTimePropsType) => {
     const scrollRef = useRef<HTMLUListElement>(null);
 
     const [time, setTime] = useState({
-      hour: 0,
-      minute: 0
+      hour: '',
+      minute: ''
     });
 
+    const [selectTime, setSelectTime] = useState<TimeState>({
+      start: {
+        hour: Array.from({length: 24}, (_, index) => index.toString().padStart(2,'0')),
+        minute: Array.from({length: 59}, (_, index) => index.toString().padStart(2,'0')),
+      },
+      end: {
+        hour: Array.from({length: 24}, (_, index) => index.toString().padStart(2,'0')),
+        minute: Array.from({length: 59}, (_, index) => index.toString().padStart(2,'0')),
+      }
+    });
+
+    const [formMsg, setFormMsg] = useState('');
     const [scrollPosition, setScrollPosition] = useState(0);
     const [hours, setHours] = useState(Array.from({length: 24}, (_, index) => index.toString().padStart(2,'0')));
     const [minutes, seMinutes] = useState(Array.from({length: 24}, (_, index) => index.toString().padStart(2,'0')));
@@ -85,42 +108,57 @@ export const InputTime = (Props: InputTimePropsType) => {
       const { name, value } = e.target;
 
       if(value.length < 3) {
+        if(value.length === 2 && !selectTime.start[name as keyof TimeType].includes(value)) {
+          console.log('disparei');
+          setFormMsg('Horário Inválido.');
+          return;
+        };
+        setFormMsg('');
+        
         setTime(prevState => ({
           ...prevState,
           [name]: value
         }));
-      }
+      };
 
     }
 
     return (
         <details className="max-w-[288px] relative cursor-pointer" ref={detailsRef}>
             <summary className="flex items-center justify-end text-lg list-none border border-purple-800 rounded-md" onClick={handleClick}>
-                <input 
-                  className="outline-none appearance-none max-w-[67px] bg-transparent py-1 px-2 text-center tracking-widest"
-                  type="number" 
-                  name="hour" 
-                  id="hour"
-                  value={time.hour ? time.hour : ''}
-                  placeholder="hh"
-                  onChange={changeTime}
-                  minLength={2}
-                  maxLength={2}
-                  max={23}
-                />
-                :
-                <input 
-                  className="outline-none appearance-none max-w-[67px] bg-transparent py-1 px-2 text-center tracking-widest"
-                  type="number" 
-                  name="minute" 
-                  id="minute"
-                  value={time.minute ? time.minute : ''}
-                  placeholder="mm"
-                  onChange={changeTime}
-                  minLength={2}
-                  maxLength={2}
-                />  
+                <div>
+                  <input
+                    className="outline-none appearance-none max-w-[67px] bg-transparent py-1 px-2 text-center tracking-widest"
+                    type="number"
+                    name="hour"
+                    id="hour"
+                    value={time.hour ? time.hour : ''}
+                    placeholder="hh"
+                    onChange={changeTime}
+                    minLength={2}
+                    maxLength={2}
+                    max={23}
+                  />
+                  :
+                  <input
+                    className="outline-none appearance-none max-w-[67px] bg-transparent py-1 px-2 text-center tracking-widest"
+                    type="number"
+                    name="minute"
+                    id="minute"
+                    value={time.minute ? time.minute : ''}
+                    placeholder="mm"
+                    onChange={changeTime}
+                    minLength={2}
+                    maxLength={2}
+                  />
+                </div>
             </summary>
+              {formMsg &&
+                <FormErrMsg 
+                  formErrMsg={formMsg}
+                  name="Horário"
+                />
+              }
             <div className="flex justify-between">
                 <ul ref={scrollRef} className="absolute w-1/2 max-w-[288px] max-h-44 mt-1 rounded-l-md backdrop-blur-sm bg-stone-400/20 z-20 overflow-y-scroll scroll-smooth snap-y">
                     {hours.map((hour) => (
