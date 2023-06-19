@@ -31,6 +31,12 @@
     
 @layer components {
 
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
     .hour-dark::-webkit-calendar-picker-indicator {
         filter: invert(100%) sepia(100%) saturate(10000%) hue-rotate(180deg);
         cursor: pointer;

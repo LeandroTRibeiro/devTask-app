@@ -51,7 +51,7 @@ export const DayTasks = (Props: DayTasksPropsType) => {
     }, [Props.selectedDay]);
 
     return (
-        <div className="flex flex-col w-full gap-5 backdrop-blur-sm bg-purple-800/30 dark:bg-stone-400/10 rounded-md p-5 text-stone-900 dark:text-stone-100 dark:font-thin overflow-y-scroll snap-y snap-mandatory scroll-smooth">
+        <div className="flex flex-col w-full gap-5 backdrop-blur-sm bg-stone-200 dark:bg-stone-400/10 rounded-md p-5 text-stone-900 dark:text-stone-100 dark:font-thin overflow-y-scroll snap-y snap-mandatory scroll-smooth">
             <div className="flex items-center gap-2 snap-start pt-5">
                 <h1 className="text-2xl">{selectDay.title}</h1>
                 <button className='transitions hover:text-purple-800 active:scale-90' onClick={() => Props.minusDay()}><CaretCircleLeft size={35} /></button>
@@ -79,7 +79,7 @@ export const DayTasks = (Props: DayTasksPropsType) => {
                         <div className='flex flex-col justify-between'>
                             <span className='w-10'>{hours}</span>
                         </div>
-                        <div className='grid grid-cols-12 gap-y-1'>
+                        <div className='grid grid-cols-60 gap-y-1'>
                             {tasks.map((tasks) => {
 
                                 const startHour = +tasks.start.split(':')[0];
@@ -88,10 +88,13 @@ export const DayTasks = (Props: DayTasksPropsType) => {
                                 const endMinute = +tasks.end.split(':')[1];
                                 const hour = +hours.split(':')[0];
 
+                                console.log(startHour, startMinute, endHour, endMinute, hour);
+                                
+
                                 if(
-                                    (tasks.day === selectDay.day && 
-                                    tasks.month === selectDay.month && 
-                                    tasks.year === selectDay.year) ||
+                                    (tasks.day.includes(selectDay.day)  && 
+                                    tasks.month.includes(selectDay.month) && 
+                                    tasks.year.includes(selectDay.year)) ||
                                     tasks.repeat.includes(selectDay.week)
                                 ) {
                                     
@@ -113,7 +116,7 @@ export const DayTasks = (Props: DayTasksPropsType) => {
                                             <div
                                                key={nanoid()}
                                                title={tasks.title} 
-                                               className={`overflow-hidden col-start-1 col-end-13 p-1 flex justify-center items-center rounded-md bg-red-500 `}
+                                               className={`overflow-hidden col-start-1 col-end-60 p-1 flex justify-center items-center rounded-md bg-red-500 `}
                                             >
                                                {tasks.title}
                                             </div>

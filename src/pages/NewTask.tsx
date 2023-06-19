@@ -84,7 +84,7 @@ export const NewTask = (Props: NewTaskPropsType) => {
                         placeholder=''
                         formErrMsg={formMsg}
                         disabled={disabled}
-                        required={true}
+                        required={false}
                     />
                 </label>
                 <label className='flex flex-col'>
@@ -98,11 +98,15 @@ export const NewTask = (Props: NewTaskPropsType) => {
                 <div className='flex w-full gap-5'>
                     <label className='w-1/2'>
                         <span>Começa</span>
-                        <InputTime />
+                        <InputTime 
+                            hour={newTask.start}
+                        />
                     </label>
                     <label className='w-1/2'>
                         <span>Termina</span>
-                        <InputTime />
+                        <InputTime 
+                            hour={newTask.end}
+                        />
                     </label>
                 </div>
                 {/* <div className='w-full flex justify-around'>

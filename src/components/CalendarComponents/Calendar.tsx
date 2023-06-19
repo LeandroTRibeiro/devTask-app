@@ -77,7 +77,7 @@ export const Calendar = (Props: CalendarPropsType) => {
     
 
     return (
-        <section className="w-56 h-[28.5rem] flex flex-col items-center gap-2 backdrop-blur-sm bg-purple-800/30 dark:bg-stone-400/10 rounded-md p-2 text-stone-900 dark:text-stone-100 dark:font-thin">
+        <section className="w-56 h-[28.5rem] flex flex-col items-center gap-2 backdrop-blur-sm bg-stone-200 dark:bg-stone-400/10 rounded-md p-2 text-stone-900 dark:text-stone-100 dark:font-thin">
 
             <nav className='w-full flex justify-around'>
                 <button className='text-stone-950 dark:text-stone-100 transitions hover:text-purple-800 active:scale-90 dark:hover:text-purple-800' onClick={HandlerMonthMinus}><CaretLeft size={20} /></button>
