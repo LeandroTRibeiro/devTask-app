@@ -16,12 +16,12 @@ export const slice = createSlice({
     initialState: {
         tasks: [
             {
-                day: [17,18,19],
+                day: [23],
                 month: [0o6],
-                year: [2023,2024],
+                year: [2023],
                 repeat: [],
-                start: '00:05',
-                end: '00:20',
+                start: '03:55',
+                end: '04:00',
                 title: 'testindo',
                 description: ['montagem', 'inicialização', 'atualização', 'desmontagem'],
                 color: 'red'

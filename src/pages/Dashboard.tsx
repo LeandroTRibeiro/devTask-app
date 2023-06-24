@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
+
 import { useParams } from "react-router-dom";
+
 import { devTaskAPI } from "../APIs/devTaskAPI";
+
 import { Toast } from "../components/Toast";
 import { MenuTop } from "../components/menuComponents/MenuTop";
 import { WeatherWindow } from "../components/weatherComponents/WeatherWindow";
 import { Calendar } from "../components/CalendarComponents/Calendar";
 import { DayTasks } from "../components/DayTasksComponents/DayTasks";
+
 import { NewTask } from "./NewTask";
 
 interface DashboardInfoType {

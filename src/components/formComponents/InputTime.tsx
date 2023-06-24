@@ -1,24 +1,36 @@
-import { useEffect, useRef, useState, WheelEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { nanoid } from "@reduxjs/toolkit";
 import { Clock } from "@phosphor-icons/react";
 
-interface InputTimePropsType {
-    hour: string
+let side = 0;
+
+interface InputTimeProps {
+  startInput: boolean,
+  startTime: string,
+  change: (event: {value: string, name: string}) => void,
 }
 
-export const InputTime = (Props: InputTimePropsType) => {
-
+export const InputTime = (props: InputTimeProps) => {
+  
     const detailsRef = useRef<HTMLDetailsElement>(null);
-    const scrollRef = useRef<HTMLUListElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const summaryRef = useRef<HTMLDetailsElement>(null);
+    const hoursRef = useRef<HTMLUListElement>(null);
+    const minutesRef = useRef<HTMLUListElement>(null);
 
-    const [time, setTime] = useState({
-      hour: 0,
-      minute: 0
+    const [onFocus, setOnFocus] = useState(false);
+    const [highlightedIndexHour, setHighlightedIndexHour] = useState<number>(-1);
+    const [highlightedIndexMinute, setHighlightedIndexMinute] = useState<number>(-1);
+
+    const [selectedTime, setSelectedTime] = useState({
+      hour: '',
+      minute: ''
     });
 
-    const [scrollPosition, setScrollPosition] = useState(0);
-    const [hours, setHours] = useState(Array.from({length: 24}, (_, index) => index.toString().padStart(2,'0')));
-    const [minutes, seMinutes] = useState(Array.from({length: 24}, (_, index) => index.toString().padStart(2,'0')));
+    const [listTimes, setListTimes] = useState({
+      hours: Array.from({length: 24}, (_, index) => index.toString().padStart(2,'0')),
+      minutes: Array.from({length: 60}, (_, index) => index.toString().padStart(2,'0'))
+    });
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -34,111 +46,196 @@ export const InputTime = (Props: InputTimePropsType) => {
         return () => {
           document.removeEventListener('click', handleClickOutside);
         };
-    }, []);    
+    }, []);
+    
+    useEffect(() => {
+      if(!props.startInput && props.startTime) {
+        const startTime = {
+          hour: +props.startTime.split(':')[0],
+          minute: +props.startTime.split(':')[1]
+        }
 
-    const handleScroll = (event: React.UIEvent<HTMLUListElement>) => {
-        const target = event.target as HTMLUListElement;
-        const currentPosition = target.scrollTop;
-      
-        if (currentPosition === 0) {
-          // Impedir rolagem para cima além do topo
-          target.scrollTop = 1;
-        } else if (
-          currentPosition + target.offsetHeight >= target.scrollHeight
-        ) {
-          // Impedir rolagem para baixo além do final
-          target.scrollTop = target.scrollHeight - target.offsetHeight - 1;
+        setListTimes({
+          hours: listTimes.hours.filter((item) => +item >= startTime.hour || +item === 0),
+          minutes: listTimes.minutes.filter((item) => +item >= startTime.minute || +item === 0)
+        });
+
+      }
+    }, [props.startTime]);
+
+    useEffect(() => {
+
+      if(props.startInput) {
+        props.change({
+          value: `${selectedTime.hour}:${selectedTime.minute}`,
+          name: 'start'
+        });
+      };
+
+      if(!props.startInput) {
+        props.change({
+          value: `${selectedTime.hour}:${selectedTime.minute}`,
+          name: 'end'
+        });
+      };
+
+    }, [selectedTime]);
+    
+    useEffect(() => {
+
+      const handleKeyDown = (event: KeyboardEvent) => {
+
+        if(
+            hoursRef.current && 
+            minutesRef.current && 
+            detailsRef.current && 
+            onFocus
+          ) {
+
+          const hoursItems = Array.from(hoursRef.current.children);
+          const minutesItems = Array.from(minutesRef.current.children);
+
+          let hourIndex = highlightedIndexHour;
+          let minuteIndex = highlightedIndexMinute;
+
+          if (event.key === "ArrowLeft" || event.key === "ArrowRight" && detailsRef.current.open === true) {
+              side === 0 ? side = 1 : side = 0;
+          } else if (event.key === "ArrowUp" && detailsRef.current.open === true) {
+            event.preventDefault();
+            if (side === 0) {
+              hourIndex = (highlightedIndexHour - 1 + hoursItems.length) % hoursItems.length;
+              hoursItems[hourIndex].scrollTo();                           
+            }
+            if (side === 1) {
+              minuteIndex = (highlightedIndexMinute - 1 + minutesItems.length) % minutesItems.length;
+              minutesItems[minuteIndex].scrollTo();
+            }
+          } else if (event.key === "ArrowDown" && detailsRef.current.open === true) {
+            event.preventDefault();
+            if (side === 0) {
+              hourIndex = (highlightedIndexHour + 1) % hoursItems.length;
+              hoursItems[hourIndex].scrollTo();                           
+            }
+            if (side === 1) {
+              minuteIndex = (highlightedIndexMinute + 1) % minutesItems.length;
+              minutesItems[minuteIndex].scrollTo(); 
+            }
+          } else if (event.key === "Enter") {
+            event.preventDefault();
+            if(side === 0) {
+              if (hourIndex >= 0 && hourIndex < hoursItems.length) {
+                setSelectedTime(prev => ({...prev, hour: hoursItems[hourIndex].innerHTML}));
+                return;
+              }
+
+            }
+            if(side === 1) {
+              if (hourIndex >= 0 && hourIndex < hoursItems.length) {
+                setSelectedTime(prev => ({...prev, minute: minutesItems[minuteIndex].innerHTML}));
+                detailsRef.current.open = false;
+                return;
+              }
+            }
+            side = 0;
+            detailsRef.current.open = true;
+          }
+          setHighlightedIndexHour(hourIndex);
+          setHighlightedIndexMinute(minuteIndex);
         }
-      
-        if (currentPosition > scrollPosition) {
-          // Rolar para baixo, adicionar próximo item da lista
-          setHours((prevHours) => {
-            const nextIndex = (prevHours.indexOf(prevHours[prevHours.length - 1]) + 1) % prevHours.length;
-            return [...prevHours, prevHours[nextIndex]];
-          });
-        } else if (currentPosition < scrollPosition) {
-          // Rolar para cima, adicionar item anterior da lista
-          setHours((prevHours) => {
-            const lastIndex = prevHours.length - 1;
-            const prevIndex = (lastIndex + prevHours.indexOf(prevHours[0])) % lastIndex;
-            return [prevHours[prevIndex], ...prevHours];
-          });
-        }
-      
-        setScrollPosition(currentPosition);
-    };
+      }
+
+      document.addEventListener('keydown', handleKeyDown);
+
+      return () => document.removeEventListener('keydown', handleKeyDown);
+
+    }, [highlightedIndexHour, highlightedIndexMinute, listTimes, onFocus]);
+
+    useEffect(() => {
+      if(summaryRef.current) {
+          summaryRef.current.addEventListener("focus", () => setOnFocus(true));
+          summaryRef.current.addEventListener("blur", () => setOnFocus(false));
+      }
+  
+      return () => {
+          if(summaryRef.current) {
+              summaryRef.current.removeEventListener("focus", () => setOnFocus(true));
+              summaryRef.current.removeEventListener("blur", () => setOnFocus(false));
+          }
+      }
+    }, []);
     
     const handleClick = () => {
-
-      if(detailsRef.current) {
-        detailsRef.current.open = true; // Abre o <details>
-        const input = document.getElementById("time") as HTMLInputElement | null;
-        if (input) {
-          input.focus();
-          input.select();
-        }
+      if(detailsRef.current && inputRef.current) {
+        detailsRef.current.open = true;
+        inputRef.current.focus();
+        inputRef.current.select();
       }
     };
 
     const changeTime = (e: React.ChangeEvent<HTMLInputElement>) => {
-
       const { name, value } = e.target;
-
+      
       if(value.length < 3) {
-        setTime(prevState => ({
-          ...prevState,
-          [name]: value
-        }));
+        if((name === 'hour' && +value < 24 && +value > -1) || (name === 'minute' && +value < 60 && +value > -1)) {
+          setSelectedTime(prevState => ({
+            ...prevState,
+            [name]: value
+          }));
+          return;
+        }
       }
-
+        setSelectedTime(prevState => ({
+          ...prevState,
+          [name]: '00'
+        }));
     }
 
     return (
-        <details className="max-w-[288px] relative cursor-pointer" ref={detailsRef}>
-            <summary className="flex items-center justify-end text-lg list-none border border-purple-800 rounded-md" onClick={handleClick}>
-                <input 
+        <details ref={detailsRef} className="max-w-[288px] relative cursor-pointer" >
+            <summary ref={summaryRef} className="flex items-center justify-end text-lg list-none border border-purple-800 rounded-md" onClick={handleClick}>
+                <input
+                  ref={inputRef} 
                   className="outline-none appearance-none max-w-[67px] bg-transparent py-1 px-2 text-center tracking-widest"
                   type="number" 
                   name="hour" 
                   id="hour"
-                  value={time.hour ? time.hour : ''}
+                  value={selectedTime.hour ? selectedTime.hour : ''}
                   placeholder="hh"
                   onChange={changeTime}
-                  minLength={2}
                   maxLength={2}
-                  max={23}
                 />
-                :
+                <div>:</div>
                 <input 
                   className="outline-none appearance-none max-w-[67px] bg-transparent py-1 px-2 text-center tracking-widest"
                   type="number" 
                   name="minute" 
                   id="minute"
-                  value={time.minute ? time.minute : ''}
+                  value={selectedTime.minute ? selectedTime.minute : ''}
                   placeholder="mm"
                   onChange={changeTime}
-                  minLength={2}
                   maxLength={2}
                 />  
             </summary>
             <div className="flex justify-between">
-                <ul ref={scrollRef} className="absolute w-1/2 max-w-[288px] max-h-44 mt-1 rounded-l-md backdrop-blur-sm bg-stone-400/20 z-20 overflow-y-scroll scroll-smooth snap-y">
-                    {hours.map((hour) => (
-                            <li 
-                                key={nanoid()}
-                                className="snap-start w-full flex items-center justify-center p-2 hover:bg-purple-800 first:rounded-tl-md last:rounded-bl-md"
-                            >
-                                {hour}
-                            </li>
+                <ul ref={hoursRef} className="absolute w-1/2 max-w-[288px] max-h-44 mt-1 rounded-l-md backdrop-blur-sm bg-stone-400/20 z-20 overflow-y-scroll scroll-smooth snap-y">
+                    {listTimes.hours.map((hour, index) => (
+                          <li 
+                            key={nanoid()}
+                            onClick={() => setSelectedTime(prev => ({...prev, hour: hour}))}
+                            className={`snap-start w-full flex items-center justify-center p-2 hover:bg-purple-800 first:rounded-tl-md last:rounded-bl-md ${index === highlightedIndexHour ? 'bg-purple-800 focus:' : ''}`}
+                          >
+                            {hour}
+                          </li>
                     ))}
                 </ul>
-                <ul className="absolute w-1/2 right-0 max-w-[288px] max-h-44 mt-1 rounded-r-md backdrop-blur-sm bg-stone-400/20 z-20 overflow-y-scroll snap-y">
-                    {Array.from({ length: 24 }, (_, indexH) => (
+                <ul ref={minutesRef} className="absolute w-1/2 right-0 max-w-[288px] max-h-44 mt-1 rounded-r-md backdrop-blur-sm bg-stone-400/20 z-20 overflow-y-scroll snap-y">
+                    {listTimes.minutes.map((minute, index) => (
                         <li 
-                            key={nanoid()}
-                            className="snap-start w-full flex items-center justify-center p-2 hover:bg-purple-800 first:rounded-tr-md last:rounded-br-md"
+                          key={nanoid()}
+                          onClick={() => setSelectedTime(prev => ({...prev, minute: minute}))}
+                          className={`snap-start w-full flex items-center justify-center p-2 hover:bg-purple-800 first:rounded-tr-md last:rounded-br-md ${index === highlightedIndexMinute ? 'bg-purple-800' : ''}`}
                         >
-                                <div>{indexH.toString().padStart(2,'0')}</div>
+                            {minute}
                         </li>
                     ))}
                 </ul>
