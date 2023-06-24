@@ -1,12 +1,12 @@
 import { Eye, EyeClosed } from "@phosphor-icons/react";
 
-interface PropsType {
+interface ShowPasswordIconsPropsType {
     showPassword: boolean,
     message: string,
     onClick: () => void
 }
 
-export const ShowPasswordIcons = (props: PropsType) => {
+export const ShowPasswordIcons = (props: ShowPasswordIconsPropsType) => {
 
     return (
         <>

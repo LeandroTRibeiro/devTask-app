@@ -1,18 +1,20 @@
 import { useState } from 'react';
 
-import axios from "axios";
-import { AxiosError } from 'axios';
-
-import { PencilLine } from "@phosphor-icons/react";
-import { API } from '../api/API';
-import { setCookies } from '../helpers/Cookie';
 import { useDispatch } from 'react-redux';
 import { setLogged } from '../redux/reducers/LoggedReducer';
 import { useNavigate } from 'react-router-dom';
+
+import axios from "axios";
+import { AxiosError } from 'axios';
+import { devTaskAPI } from '../APIs/devTaskAPI';
+import { setCookies } from '../helpers/Cookie';
+
 import { Toast } from '../components/Toast';
-import { ShowPasswordIcons } from '../components/ShowPasswordIcons';
-import { Input } from '../components/Input';
-import { FormErrMsg } from '../components/FormErrMsg';
+import { ShowPasswordIcons } from '../components/formComponents/ShowPasswordIcons';
+import { Input } from '../components/formComponents/Input';
+import { FormErrMsg } from '../components/formComponents/FormErrMsg';
+
+import { PencilLine } from "@phosphor-icons/react";
 
 export const Signin = () => {
 
@@ -37,26 +39,25 @@ export const Signin = () => {
         if(email != emailConfirm) {
             setFormMsg('Os Emails devem ser iguais');
             return;
-        }    
+        };
         if(password != passwordConfirm) {
             setFormMsg('As Senhas devem ser iguais');
             return;
-        }
+        };
 
         setFormMsg('');
         setDisabled(true);
 
         try {
 
-            const response = await API.signin(firstName, lastName, email, password);
+            const response = await devTaskAPI.signin(firstName, lastName, email, password);
             setCookies(response.token);
             dispatch(setLogged(true));
-            navigate('/dashboard');
+            navigate(`/${response.id}/dashboard`);
             
         } catch(error: unknown | AxiosError) {
             
             if (axios.isAxiosError(error))  {
-
                 if(error.message.includes('Network')) {
                     setFormMsg('No momento nossos servidores estão ocupados tente novamente mais tarde!');
                     setDisabled(false);
@@ -113,9 +114,10 @@ export const Signin = () => {
                         id='firstName'
                         placeholder='digite seu nome'
                         value={firstName}
-                        onChange={setFirstName}
+                        onChange={(e) => setFirstName(e.target.value)}
                         formErrMsg={formMsg}
                         disabled={disabled}
+                        required={true}
                     />
                     <FormErrMsg 
                         formErrMsg={formMsg}
@@ -130,9 +132,10 @@ export const Signin = () => {
                         id='lastName'
                         placeholder='digite seu sobrenome'
                         value={lastName}
-                        onChange={setLastName}
+                        onChange={(e) => setLastName(e.target.value)}
                         formErrMsg={formMsg}
                         disabled={disabled}
+                        required={true}
                     />
                     <FormErrMsg 
                         formErrMsg={formMsg}
@@ -147,9 +150,10 @@ export const Signin = () => {
                         id='email'
                         placeholder='digite seu email'
                         value={email}
-                        onChange={setEmail}
+                        onChange={(e) => setEmail(e.target.value)}
                         formErrMsg={formMsg}
                         disabled={disabled}
+                        required={true}
                     />
                     <FormErrMsg 
                         formErrMsg={formMsg}
@@ -164,9 +168,10 @@ export const Signin = () => {
                         id='emailConfirm'
                         placeholder='confirme seu email'
                         value={emailConfirm}
-                        onChange={setEmaiConfirm}
+                        onChange={(e) => setEmaiConfirm(e.target.value)}
                         formErrMsg={formMsg}
                         disabled={disabled}
+                        required={true}
                     />
                 </label>
                 <label className="flex flex-col w-full tablet-p:text-sm">
@@ -178,9 +183,10 @@ export const Signin = () => {
                             id='password'
                             placeholder='digite sua senha'
                             value={password}
-                            onChange={setPassword}
+                            onChange={(e) => setPassword(e.target.value)}
                             formErrMsg={formMsg}
                             disabled={disabled}
+                            required={true}
                         />
                         <ShowPasswordIcons 
                             message={formMsg}
@@ -202,9 +208,10 @@ export const Signin = () => {
                             id='passwordConfirm'
                             placeholder='confirme sua senha'
                             value={passwordConfirm}
-                            onChange={setPasswordConfirm}
+                            onChange={(e) => setPasswordConfirm(e.target.value)}
                             formErrMsg={formMsg}
                             disabled={disabled}
+                            required={true}
                         />
                         <ShowPasswordIcons 
                             message={formMsg}
@@ -213,7 +220,7 @@ export const Signin = () => {
                         />
                     </div>
                 </label>
-                <button className="col-span-2 tablet-p:col-span-1 font-medium tracking-wider border border-purple-800 rounded-md bg-purple-800 text-stone-100 py-2 hover:bg-stone-100 dark:hover:bg-stone-950 hover:text-purple-800 active:scale-95 transition-all duration-200 ease-in-out" disabled={disabled}>ENTRAR</button>
+                <button className="col-span-2 tablet-p:col-span-1 font-medium tracking-wider border border-purple-800 rounded-md bg-purple-800 text-stone-100 py-2 hover:bg-stone-100 dark:hover:bg-stone-950 hover:text-purple-800 active:scale-90 transitions" disabled={disabled}>ENTRAR</button>
             </form>
         </section>
     );

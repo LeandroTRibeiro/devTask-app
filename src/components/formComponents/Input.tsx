@@ -1,20 +1,21 @@
-interface PropsType {
+interface InputPropsType {
     type: string,
     name: string,
     id: string,
     placeholder: string,
     value: string,
-    onChange: (e: string) => void,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
     disabled: boolean,
+    required: boolean,
     formErrMsg: string
 };
 
-export const Input = (props: PropsType) => {
+export const Input = (props: InputPropsType) => {
 
     return (
         <input 
             className={
-                `w-full px-2 py-2 outline-none border rounded-md bg-stone-100 dark:bg-stone-950 ${props.formErrMsg.includes('Email') && props.id.includes('email') ||
+                `w-full p-2 outline-none border rounded-md date dark:date-dark bg-transparent ${props.formErrMsg.includes('Email') && props.id.includes('email') ||
                 props.formErrMsg.includes('Senha') && props.id.includes('password') ||
                 props.formErrMsg.includes('Nome') && props.id.includes('firstName') ||
                 props.formErrMsg.includes('Sobrenome') && props.id.includes('lastName')
@@ -25,10 +26,10 @@ export const Input = (props: PropsType) => {
             id={props.id}
             placeholder={props.placeholder}
             value={props.value ? props.value : ''}
-            onChange={(e) => props.onChange(e.target.value)}
+            onChange={(e) => props.onChange(e)}
             autoComplete='on'
             minLength={props.name.includes('assword') ? 6 : 1}
-            required
+            required={props.required ? true : false}
             disabled={props.disabled}
         />
     );

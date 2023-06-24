@@ -2,11 +2,11 @@ import { useState } from "react";
 
 import { Link } from "react-router-dom";
 
-import { API } from "../api/API";
+import { devTaskAPI } from "../APIs/devTaskAPI";
 import axios from "axios";
 
-import { Input } from "../components/Input";
-import { FormErrMsg } from "../components/FormErrMsg";
+import { Input } from "../components/formComponents/Input";
+import { FormErrMsg } from "../components/formComponents/FormErrMsg";
 import { Toast } from "../components/Toast";
 
 import { PencilLine } from "@phosphor-icons/react";
@@ -26,7 +26,7 @@ export const ForgotPassword = () => {
 
         try {
 
-            const response = await API.forgotPassword(email);
+            await devTaskAPI.forgotPassword(email);
 
             setDisabled(false);
             setFormMsg('O email foi enviado com sucesso, acesse sua caixa de entrada e clique no link para refazer sua senha!');
@@ -46,7 +46,6 @@ export const ForgotPassword = () => {
             };
         }
     };
-
 
     return (
         <section className={`w-screen max-w-[1440px] h-screen flex tablet-p:flex-col-reverse bg-stone-100 dark:bg-stone-950 ${disabled ? 'grayscale animate-pulse' : ''}`}>
@@ -68,16 +67,17 @@ export const ForgotPassword = () => {
                         id='email'
                         placeholder='digite seu email'
                         value={email}
-                        onChange={setEmail}
+                        onChange={(e) => setEmail(e.target.value)}
                         disabled={disabled}
                         formErrMsg={formMsg}
+                        required={true}
                     />
                     <FormErrMsg
                         formErrMsg={formMsg}
                         name='Email'
                     />
                 </label>
-                <button className="w-full font-medium tracking-wider border border-purple-800 rounded-md bg-purple-800 text-stone-100 py-2 hover:bg-stone-100 dark:hover:bg-stone-950 hover:text-purple-800 active:scale-95 transition-all duration-200 ease-in-out disabled:grayscale disabled:animate-pulse" disabled={disabled}>Enviar</button>
+                <button className="w-full font-medium tracking-wider border border-purple-800 rounded-md bg-purple-800 text-stone-100 py-2 hover:bg-stone-100 dark:hover:bg-stone-950 hover:text-purple-800 active:scale-90 transitions disabled:grayscale disabled:animate-pulse" disabled={disabled}>Enviar</button>
                 <p className='text-center'>Não possui cadastro?<Link to="/signin" className="text-purple-800"> Casdastre-se é grátis.</Link></p>
             </form>
             <div className="flex-1 flex flex-col py-5 items-center justify-center px-10 mobile-g:px-5 font-montserrat bg-purple-400 dark:bg-stone-800">

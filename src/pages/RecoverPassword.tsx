@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react';
 
+import { useDispatch } from 'react-redux';
+import { setLogged } from '../redux/reducers/LoggedReducer';
+
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import axios from 'axios';
-import { API } from '../api/API';
+import { devTaskAPI } from '../APIs/devTaskAPI';
+import { setCookies } from '../helpers/Cookie';
+
+import { Input } from '../components/formComponents/Input';
+import { Toast } from '../components/Toast';
+import { FormErrMsg } from '../components/formComponents/FormErrMsg';
+import { ShowPasswordIcons } from '../components/formComponents/ShowPasswordIcons';
 
 import { PencilLine } from "@phosphor-icons/react";
-import { Input } from '../components/Input';
-import { Toast } from '../components/Toast';
-import { FormErrMsg } from '../components/FormErrMsg';
-import { ShowPasswordIcons } from '../components/ShowPasswordIcons';
-import { useDispatch } from 'react-redux';
-import { setCookies } from '../helpers/Cookie';
-import { setLogged } from '../redux/reducers/LoggedReducer';
 
 interface TokenType {
     token: string,
@@ -46,35 +48,31 @@ export const RecoverPassword = () => {
             const token = searchParams.get('token');
 
             if(token) {
-
                 try {
-    
-                    await API.tokenVerification(token);
-    
+                    await devTaskAPI.tokenVerification(token);
                     setToken(({
                         token,
                         valid: true
                     }));
     
                 } catch(error) {
-    
                     setToken({
                         token: '',
                         valid: false
                     });
                 }
+
                 return;
-            }
+            };
 
             setToken({
                 token: '',
                 valid: false
             });
-        }
+        };
 
         verifyToken();
-
-    },[])
+    },[]);
 
     const HandlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
@@ -83,25 +81,21 @@ export const RecoverPassword = () => {
         if(password != passwordConfirm) {
             setFormMsg('As Senhas devem ser iguais!');
             return;
-        }
+        };
 
         setFormMsg('');
         setDisabled(true);
 
         try {
 
-            const response = await API.recoverPassword(token.token, password);
-
+            const response = await devTaskAPI.recoverPassword(token.token, password);
             setCookies(response.token);
             dispatch(setLogged(true));
-            navigate('/dashboard');
+            navigate(`/${response.id}/dashboard`);
 
         } catch(error) {
 
-            if (axios.isAxiosError(error))  {
-
-                console.log(error.message);
-                
+            if (axios.isAxiosError(error))  {                
                 if(error.message.includes('Network')) {
                     setFormMsg('No momento nossos servidores estão ocupados tente novamente mais tarde!');
                     setDisabled(false);
@@ -111,7 +105,7 @@ export const RecoverPassword = () => {
                 setDisabled(false);
                 return;
             };
-        }
+        };
     };
 
     if(token.valid === true) {
@@ -137,9 +131,10 @@ export const RecoverPassword = () => {
                                 id='password'
                                 placeholder='digite seu senha'
                                 value={password}
-                                onChange={setPassword}
+                                onChange={(e) => setPassword(e.target.value)}
                                 disabled={disabled}
                                 formErrMsg={formMsg}
+                                required={true}
                             />
                             <ShowPasswordIcons 
                                 message={formMsg}
@@ -163,9 +158,10 @@ export const RecoverPassword = () => {
                                 id='passwordConfirm'
                                 placeholder='confirme seu senha'
                                 value={passwordConfirm}
-                                onChange={setPasswordConfirm}
+                                onChange={(e) => setPasswordConfirm(e.target.value)}
                                 disabled={disabled}
                                 formErrMsg={formMsg}
+                                required={true}
                             />
                             <ShowPasswordIcons 
                                 message={formMsg}
@@ -174,7 +170,7 @@ export const RecoverPassword = () => {
                             />
                         </div>
                     </label>
-                    <button className="w-full font-medium tracking-wider border border-purple-800 rounded-md bg-purple-800 text-stone-100 py-2 hover:bg-stone-100 dark:hover:bg-stone-950 hover:text-purple-800 active:scale-95 transition-all duration-200 ease-in-out disabled:grayscale disabled:animate-pulse" disabled={disabled}>Redefinir</button>
+                    <button className="w-full font-medium tracking-wider border border-purple-800 rounded-md bg-purple-800 text-stone-100 py-2 hover:bg-stone-100 dark:hover:bg-stone-950 hover:text-purple-800 active:scale-90 transitions disabled:grayscale disabled:animate-pulse" disabled={disabled}>Redefinir</button>
                     <p className='text-center'>Não possui cadastro?<Link to="/signin" className="text-purple-800"> Casdastre-se é grátis.</Link></p>
                 </form>
                 <div className="flex-1 flex flex-col py-5 items-center justify-center px-10 mobile-g:px-5 font-montserrat bg-purple-400 dark:bg-stone-800">
@@ -191,11 +187,11 @@ export const RecoverPassword = () => {
                 <span className='flex flex-col justify-center items-center gap-5 text-center px-5 text-stone-950 dark:text-stone-100'>
                     O token de acesso expirou.
                     <p>Por favor, reenvie o email para continuar usando o aplicativo.</p>
-                    <Link to='/forgotpassword'><button className="w-52 col-span-2 tablet-p:col-span-1 font-medium tracking-wider border border-purple-800 rounded-md bg-purple-800 text-stone-100 py-2 hover:bg-transparent hover:text-purple-800 active:scale-95 transition-all duration-200 ease-in-out">OK</button></Link>
+                    <Link to='/forgotpassword'><button className="w-52 col-span-2 tablet-p:col-span-1 font-medium tracking-wider border border-purple-800 rounded-md bg-purple-800 text-stone-100 py-2 hover:bg-transparent hover:text-purple-800 active:scale-90 transitions">OK</button></Link>
                 </span>
             </div>
         );
     } else {
         return null;
-    }
+    };
 };

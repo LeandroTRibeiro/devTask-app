@@ -1,9 +1,9 @@
-interface PropsType {
+interface FormErrMsgPropsType {
     formErrMsg: string,
     name: string
 }
 
-export const FormErrMsg = (props: PropsType) => {
+export const FormErrMsg = (props: FormErrMsgPropsType) => {
     return (
         <>
             {props.formErrMsg.includes(props.name) &&
