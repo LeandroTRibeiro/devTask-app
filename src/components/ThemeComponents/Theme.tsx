@@ -24,10 +24,10 @@ export const Theme = () => {
 
     return (
         <div className={`${theme} w-screen flex justify-center items-center ${theme === 'dark' ? 'bg-stone-950' : 'bg-stone-100'}`}>
-            {theme === 'dark' && !logged &&
+            {theme === 'dark' && logged &&
             <SunDim size={35} className='absolute z-20 right-3 top-3 text-stone-100 cursor-pointer' onClick={() => dispatch(setTheme('light'))} />
             }
-            {theme === 'light' && !logged &&
+            {theme === 'light' && logged &&
             <MoonStars size={35} className='absolute z-20 right-3 top-3 text-stone-950 cursor-pointer' onClick={() => dispatch(setTheme('dark'))} />
             }
             <RouterList />

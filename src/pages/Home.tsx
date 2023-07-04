@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 import { devTaskAPI } from '../APIs/devTaskAPI';
-import { getCookies, setCookies } from '../helpers/Cookie';
+import { getCookies, setCookies } from '../helpers/cookie';
 
 import { Input } from '../components/formComponents/Input';
 import { Toast } from '../components/Toast';

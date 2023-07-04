@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 
-import { calendarDataUpdate } from '../../helpers/Dates';
+import { calendarDataUpdate } from '../../helpers/dates';
 import { nanoid } from 'nanoid';
 
 interface CalendarPropsType {

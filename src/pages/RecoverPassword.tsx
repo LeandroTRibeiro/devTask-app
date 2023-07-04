@@ -7,7 +7,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import axios from 'axios';
 import { devTaskAPI } from '../APIs/devTaskAPI';
-import { setCookies } from '../helpers/Cookie';
+import { setCookies } from '../helpers/cookie';
 
 import { Input } from '../components/formComponents/Input';
 import { Toast } from '../components/Toast';

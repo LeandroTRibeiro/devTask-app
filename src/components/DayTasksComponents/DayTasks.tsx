@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { CalendarPlus, CaretCircleLeft, CaretCircleRight, ListMagnifyingGlass } from "@phosphor-icons/react";
 import { nanoid } from 'nanoid';
 import { useAppSelector } from '../../redux/hooks/useAppSelector';
-import { selectedDayString, setMinuteEnd, setMinuteStart } from "../../helpers/Dates";
+import { selectedDayString, setMinuteEnd, setMinuteStart } from "../../helpers/dates";
 import { NewTask } from '../../pages/NewTask';
 
 interface DayTasksPropsType {
@@ -51,11 +51,11 @@ export const DayTasks = (Props: DayTasksPropsType) => {
     return (
         <div className="flex flex-col w-full gap-5 backdrop-blur-sm bg-stone-200 dark:bg-stone-400/10 rounded-md p-5 text-stone-900 dark:text-stone-100 dark:font-thin overflow-y-scroll snap-y snap-mandatory scroll-smooth">
             <div className="flex items-center gap-2 snap-start pt-5">
-                <h1 className="text-2xl">{selectDay.title}</h1>
                 <button className='transitions hover:text-purple-800 active:scale-90' onClick={() => Props.minusDay()}><CaretCircleLeft size={35} /></button>
                 <button className='transitions hover:text-purple-800 active:scale-90' onClick={() => Props.plusDay()}><CaretCircleRight size={35} /></button>
                 <button className='p-1 border rounded-md border-purple-800 text-stone-100 bg-purple-800 transitions dark:hover:bg-transparent dark:hover:text-purple-800 active:scale-90' title='adicionar nova tarefa' onClick={Props.newTask}><CalendarPlus size={25} /></button>
                 <button className='p-1 border rounded-md border-purple-800 text-stone-100 bg-purple-800 transitions dark:hover:bg-transparent dark:hover:text-purple-800 active:scale-90' title='pesquisar por tarefas'><ListMagnifyingGlass size={25} /></button>
+                <h1 className="text-2xl">{selectDay.title}</h1>
                 <div className='flex-1 flex justify-end'>
                     <div className='text-3xl'>{clock}</div>
                 </div>

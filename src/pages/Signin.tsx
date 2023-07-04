@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { AxiosError } from 'axios';
 import { devTaskAPI } from '../APIs/devTaskAPI';
-import { setCookies } from '../helpers/Cookie';
+import { setCookies } from '../helpers/cookie';
 
 import { Toast } from '../components/Toast';
 import { ShowPasswordIcons } from '../components/formComponents/ShowPasswordIcons';

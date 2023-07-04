@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { Broom, Calendar, CalendarPlus, CaretLeft, CaretRight, CloudSun, Gear, GearSix, UserCircleGear, WechatLogo, X } from "@phosphor-icons/react";
-
-import { EditUserData } from "./EditUserData";
-// import * as Dates from '../../helpers/Dates';
 import { useDispatch } from 'react-redux';
+import { EditUserData } from "./EditUserData";
 import { setTheme } from '../../redux/reducers/ThemeReducer';
+
+import { Broom, Calendar, CalendarPlus, CloudSun, Gear, UserCircleGear, WechatLogo, X } from "@phosphor-icons/react";
 
 interface MenuPropsType {
     avatar: string;
@@ -18,8 +17,6 @@ export const MenuTop = (Props: MenuPropsType) => {
     const [editUserData, setEditUserData] = useState(false);
 
     const [openMenu, setOpenMenu] = useState(false);
-
-    // const [date, setDate] = useState(() => Dates.getDate());
 
     const HandlerEditPhoto = () => {
         setEditPhoto(false);
@@ -43,15 +40,6 @@ export const MenuTop = (Props: MenuPropsType) => {
                             <button className="w-fit border border-purple-800 bg-purple-800 font-semibold  text-stone-100 rounded-md py-1 px-8 hover:bg-transparent hover:text-purple-800 active:scale-90 transitions" onClick={HandlerEditPhoto}>SIM</button>
                         </div>
                     }
-                    {/* <div className='font-montserrat text-xl text-stone-950 dark:text-stone-100 flex items-center gap-3'>
-                        <button>
-                            <CaretLeft size={25} className='transitions hover:text-stone-100 dark:hover:text-purple-800 active:scale-90' />
-                        </button>
-                        <button>
-                            <CaretRight size={25} className='transitions hover:text-stone-100 dark:hover:text-purple-800 active:scale-90' />
-                        </button>
-                        {date}
-                    </div> */}
                 </div>
 
                 <button className='p-2' onClick={() => setOpenMenu(!openMenu)}>
