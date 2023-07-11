@@ -7,6 +7,7 @@ import { Dashboard } from '../pages/Dashboard';
 import { useAppSelector } from '../redux/hooks/useAppSelector';
 import { ForgotPassword } from '../pages/ForgotPassword';
 import { RecoverPassword } from '../pages/RecoverPassword';
+import InputList from '../pages/test';
 
 
 export const RouterList = () => {
@@ -19,5 +20,6 @@ export const RouterList = () => {
         {path: '/:id/dashboard', element: logged ? <Dashboard /> : <Home />},
         {path: '/forgotpassword', element: <ForgotPassword />},
         {path: '/recoverpassword', element: <RecoverPassword />},
+        {path: '/test', element: <InputList />}
     ]);
 };

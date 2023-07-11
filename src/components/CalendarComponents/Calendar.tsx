@@ -118,7 +118,6 @@ export const Calendar = (Props: CalendarPropsType) => {
                 ))}
             </ul>
             <button className='w-full p-1 border rounded-md border-purple-800 font-medium text-stone-100 bg-purple-800 transitions dark:hover:bg-transparent dark:hover:text-purple-800 active:scale-90' onClick={HandlerReturDay}>HOJE</button>
-            <input type="time" name="hour" id="hour" value={hour} onChange={(e) => setHour(e.target.value)}/>
         </section>
     );
 };

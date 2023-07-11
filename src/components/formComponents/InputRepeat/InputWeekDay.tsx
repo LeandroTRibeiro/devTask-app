@@ -2,50 +2,17 @@ import { useState, useRef, useEffect } from "react";
 import { nanoid } from "@reduxjs/toolkit";
 
 interface InputWeekDayPropsType {
-    change: (event: {value: number[], name: string}) => void;
+    updateRepeatWeekDay: {
+        name: string;
+        value: number;
+        selected: boolean;
+    }[];   
+    updateWeekDay: (value: number) => void;
 }
 
 export const InputWeekDay = (props: InputWeekDayPropsType) => {
 
     const weekDaysRef = useRef<HTMLDivElement>(null);
-
-    const [weekDays, setWeekDays] = useState([
-        {
-            name: "D",
-            value: 0,
-            selected: false
-        },
-        {
-            name: "S",
-            value: 1,
-            selected: false
-        },
-        {
-            name: "T",
-            value: 2,
-            selected: false
-        },
-        {
-            name: "Q",
-            value: 3,
-            selected: false
-        },
-        {
-            name: "Q",
-            value: 4,
-            selected: false
-        },
-        {
-            name: "S",
-            value: 5,
-            selected: false
-        },
-        {
-            name: "S",
-            value: 6,
-            selected: false
-        },
-    ]);
 
     useEffect(() => {
 
@@ -88,35 +55,15 @@ export const InputWeekDay = (props: InputWeekDayPropsType) => {
 
     }, []);
 
-    useEffect(() => {
-
-        const weekDaysSelected: number[] = [];
-
-        weekDays.forEach(item => {
-            if(item.selected) {
-                weekDaysSelected.push(item.value);
-            };
-        });
-
-        props.change({value: weekDaysSelected, name: 'repeat'});
-
-    }, [weekDays]);
-
-    const onClickHandler = (value: number) => {
-        setWeekDays(prevState => 
-            prevState.map(item => 
-                item.value === value ? {...item, selected: item.selected ? false : true} : {...item}));
-    };
-
     return (
         <div ref={weekDaysRef} className="flex gap-5">
-            {weekDays.map((item) => (
+            {props.updateRepeatWeekDay.map((item) => (
                 <label key={nanoid()} className="flex flex-col items-center cursor-pointer">
                     <span>{item.name}</span>
                     <button 
                         className={`w-4 h-4 rounded-full border transitions hover:outline hover:outline-1 ${item.selected ? 'bg-purple-800 border-stone-100' : 'border-purple-800'}`} 
-                        onClick={() => onClickHandler(item.value)}
-                        onKeyDown={(e) => e.key === "Enter" ? onClickHandler(item.value) : null}
+                        onClick={() => props.updateWeekDay(item.value)}
+                        onKeyDown={(e) => e.key === "Enter" ? props.updateWeekDay(item.value) : null}
                     />
                 </label>
             ))

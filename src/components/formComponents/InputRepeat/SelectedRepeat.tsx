@@ -1,39 +1,39 @@
 import { useState, useEffect } from 'react';
 
 interface SelectedRepeatPropsType {
-    selectedRepeat: number[],
+    selectedWeekDays: number[];
+    selectedSpecificDays: number[];
     frequences: {
         name: string,
         value: never[] | number[]
-    }[],
-}
+    }[];
+};
 
-export const SelectedRepeat = (props: SelectedRepeatPropsType) => {
+export const SelectedFrequency = (props: SelectedRepeatPropsType) => {
 
     const [frequence, setFrequence] = useState('');
 
     useEffect(() => {
 
-        if(props.selectedRepeat.length === 0) {
-            setFrequence('Uma vez');
-            return;
-        };
-        if(props.selectedRepeat.length === 7) {
-            setFrequence('Diariamente');
-            return;
-        };
-        props.frequences.map((item) => {
-            const matchingValues = item.value.filter((value) => props.selectedRepeat.includes(value));
-            if(
-                matchingValues.length === props.selectedRepeat.length &&
-                matchingValues.length === item.value.length
-            ) {
-                setFrequence(item.name);
+        const getFrequence = () => {
+            if(props.selectedSpecificDays.length > 0) {
+                return setFrequence("Personalizado...");
+            } else {
+                for(let i = 0; i < props.frequences.length; i++) {
+                    if(props.frequences[i].value.length === props.selectedWeekDays.length) {
+                        const sameValues = props.frequences[i].value.filter((value) => props.selectedWeekDays.includes(value));
+                        if(sameValues.length === props.selectedWeekDays.length) {
+                            return setFrequence(props.frequences[i].name);
+                        };
+                    };
+                };
             }
-        });
-        if(!frequence) setFrequence('Personalizado...');
+            if(!frequence) setFrequence("Personalizado...");
+        };
 
-    }, [props.selectedRepeat]);
+        getFrequence();
+
+    }, [props.selectedWeekDays]);
 
     return(
         <span>{frequence}</span>

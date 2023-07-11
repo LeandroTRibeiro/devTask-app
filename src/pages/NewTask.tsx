@@ -19,7 +19,8 @@ export const NewTask = (Props: NewTaskPropsType) => {
     const [newTask, setNewTask] = useState({
         title: '',
         date: '',
-        repeat: [],
+        repeatWeekDays: [],
+        repeatSpecificDays: [],
         start: '',
         end: '',
         description: '',
@@ -29,7 +30,7 @@ export const NewTask = (Props: NewTaskPropsType) => {
     const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
     const [customFrequence, setCustomFrequence] = useState(false);
 
-    const [frequences, setFrequences] = useState([
+    const frequences = [
         {
             name: 'Uma vez',
             value: []
@@ -46,7 +47,7 @@ export const NewTask = (Props: NewTaskPropsType) => {
             name: 'Finais de Semana',
             value: [0,6]
         }
-    ]);
+    ];
 
     const [disabled, setDisabled] = useState(false);
     const [formMsg, setFormMsg] = useState('');
@@ -67,13 +68,23 @@ export const NewTask = (Props: NewTaskPropsType) => {
         e.preventDefault();
     };
 
-    const changeNewTaskHandler = (event: {value: string | number[] | never[], name: string}) => {
+    const changeNewTaskHandler = (event: {value: string | number[] | string[] | never[], name: string}) => {
 
         const {value, name} = event;
 
         setNewTask(prevState => ({
             ...prevState,
             [name]: value
+        }));
+
+        if(name === 'repeatWeekDays') setNewTask(prevState => ({
+            ...prevState,
+            repeatSpecificDays: []
+        }));
+
+        if(name === 'repeatSpecificDays') setNewTask(prevState => ({
+            ...prevState,
+            repeatWeekDays: []
         }));
 
     };
@@ -84,9 +95,8 @@ export const NewTask = (Props: NewTaskPropsType) => {
     };
 
     useEffect(() => {
-        console.log(newTask.repeat);
-        
-    }, [newTask])
+        console.log(newTask);
+    }, [newTask]);
     
     return (
         <section className={`absolute top-0 left-0 w-screen max-w-[1440px] h-screen flex justify-center items-center backdrop-blur-sm bg-stone-400/20 text-stone-950 dark:text-stone-100 overflow-hidden z-20 ${disabled ? 'grayscale animate-pulse pointer-events-none' : ''}`}>
@@ -133,7 +143,8 @@ export const NewTask = (Props: NewTaskPropsType) => {
                             </span>
                             <InputReapeat
                                 frequences={frequences}
-                                selected={newTask.repeat}
+                                selectedWeekDays={newTask.repeatWeekDays}
+                                selectedSpecificDays={newTask.repeatSpecificDays}
                                 change={(event) => changeNewTaskHandler(event)}
                                 customFrequence={() => setCustomFrequence(true)}
                             />
@@ -207,6 +218,8 @@ export const NewTask = (Props: NewTaskPropsType) => {
             }
             {customFrequence &&
                 <CustomFrequence 
+                    selectedWeekDays={newTask.repeatWeekDays}
+                    selectedSpecificDays={newTask.repeatSpecificDays}
                     close={() => setCustomFrequence(false)}
                     change={(event) => changeNewTaskHandler(event)}
                 />

@@ -66,7 +66,7 @@ export const EditUserData = (Props: EditUserDataPropsType) => {
 
     useEffect(() => {
 
-        const HandlerUserInfo = async () => {
+        const handlerUserInfo = async () => {
             if(id) {
                 setDisabled(true);
                 try {
@@ -81,11 +81,11 @@ export const EditUserData = (Props: EditUserDataPropsType) => {
             };
         };
 
-        HandlerUserInfo();
+        handlerUserInfo();
 
     },[]);
 
-    const HandlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handlerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
         e.preventDefault();
 
@@ -164,9 +164,9 @@ export const EditUserData = (Props: EditUserDataPropsType) => {
         
     };
 
-    const UpdateUserData = ( e: React.ChangeEvent<HTMLInputElement>) => {
+    const updateUserData = ( e: React.ChangeEvent<HTMLInputElement>) => {
 
-        const { name, value } = e.target;
+        const { name, value } = e.target;        
 
         setUserInfo( prevState => ({
             ...prevState,
@@ -186,7 +186,7 @@ export const EditUserData = (Props: EditUserDataPropsType) => {
                 message={formMsg}
                 onClick={() => setFormMsg('')}
             />
-            <form action="POST" onSubmit={HandlerSubmit} className={`mobile-g:w-full mobile-g:h-full mobile-g:rounded-none flex flex-col gap-5 tablet-m:gap-3 shadow-xl p-5 rounded-md bg-stone-100 dark:bg-stone-950 transitions`}>
+            <form action="POST" onSubmit={handlerSubmit} className={`mobile-g:w-full mobile-g:h-full mobile-g:rounded-none flex flex-col gap-5 tablet-m:gap-3 shadow-xl p-5 rounded-md bg-stone-100 dark:bg-stone-950 transitions`}>
                 <div className="w-full flex justify-end mobile-g:justify-start">
                     {editAvatar &&
                         <CaretLeft size={25} weight="bold" className="hidden mobile-gg:flex hover:text-red-500 active:scale-90 transitions cursor-pointer" onClick={() => setEditAvatar(false)} /> 
@@ -210,7 +210,7 @@ export const EditUserData = (Props: EditUserDataPropsType) => {
                                         name='firstName'
                                         type="text"
                                         value={userInfo.firstName}
-                                        onChange={(e) => UpdateUserData(e)}
+                                        onChange={updateUserData}
                                         disabled={disabled}
                                         required={false}
                                         size={userInfo.firstName?.length || 5}
@@ -229,7 +229,7 @@ export const EditUserData = (Props: EditUserDataPropsType) => {
                                         name='lastName'
                                         type="text"
                                         value={userInfo.lastName}
-                                        onChange={(e) => UpdateUserData(e)}
+                                        onChange={updateUserData}
                                         disabled={disabled}
                                         required={false}
                                         size={userInfo.lastName?.length || 5}
@@ -249,7 +249,7 @@ export const EditUserData = (Props: EditUserDataPropsType) => {
                                 name="email"
                                 type="email"
                                 value={userInfo.email}
-                                onChange={UpdateUserData}
+                                onChange={updateUserData}
                                 formErrMsg={formMsg}
                                 placeholder=""
                                 disabled={disabled}
@@ -268,7 +268,7 @@ export const EditUserData = (Props: EditUserDataPropsType) => {
                                     name="password"
                                     type={showPassword ? 'text' : 'password'}
                                     value={userInfo.password}
-                                    onChange={UpdateUserData}
+                                    onChange={updateUserData}
                                     formErrMsg={formMsg}
                                     placeholder=""
                                     disabled={disabled}
@@ -292,7 +292,7 @@ export const EditUserData = (Props: EditUserDataPropsType) => {
                                 name="birthday"
                                 type="date"
                                 value={userInfo.birthday ? userInfo.birthday : ''}
-                                onChange={UpdateUserData}
+                                onChange={updateUserData}
                                 formErrMsg={formMsg}
                                 placeholder=""
                                 disabled={disabled}
